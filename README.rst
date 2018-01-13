@@ -1,6 +1,9 @@
 pgeocode
 ========
 
+.. image:: https://travis-ci.org/symerio/pgeocode.svg?branch=master
+   :target: https://travis-ci.org/symerio/pgeocode
+
 Postal code geocoding and distance calculations
 
 pgeocode is a Python library for high performance off-line querying of GPS coordinates, region name and municipality name
