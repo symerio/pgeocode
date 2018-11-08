@@ -68,7 +68,7 @@ class Nominatim(object):
         else:
             url = DOWNLOAD_URL.format(country=country)
             compression = _infer_compression(url, "zip")
-            reader, encoding, compression = get_filepath_or_buffer(url)
+            reader, encoding, compression = get_filepath_or_buffer(url)[:3]
             with ZipFile(reader) as fh_zip:
                 with fh_zip.open(country.upper() + '.txt') as fh:
                     data = pd.read_csv(fh,
