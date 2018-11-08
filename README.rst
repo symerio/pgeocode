@@ -56,7 +56,7 @@ Quickstart
 
 .. code:: python
 
-    >>> nomi = pgeocode.GeoDistance('fr')
+    >>> dist = pgeocode.GeoDistance('fr')
     >>> dist.query_postal_code("75013", "69006")
     389.156
     >>> dist.query_postal_code(["75013", "75014", "75015"], ["69006", "69005", "69004"])
