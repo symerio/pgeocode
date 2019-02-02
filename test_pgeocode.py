@@ -99,6 +99,16 @@ def test_nominatim_query_postal_code():
     assert not np.isfinite(res.iloc[2].latitude)
 
 
+def test_nominatim_query_postal_code_multiple():
+    nomi = Nominatim('de', non_unique=True)
+
+    res = nomi.query_postal_code('39167')
+    assert isinstance(res, pd.DataFrame)
+    assert res.shape[0] == 8
+    assert res.place_name.values[0] == 'Eichenbarleben'
+    assert res.place_name.values[7] == 'Ochtmersleben'
+
+
 def test_nominatim_distance_postal_code():
 
     gdist = GeoDistance('fr')

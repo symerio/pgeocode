@@ -39,7 +39,7 @@ class Nominatim(object):
     country: str, default='fr'
        country conde. See the documentation for a list of supported countries.
     """
-    def __init__(self, country='fr'):
+    def __init__(self, country='fr', non_unique=False):
 
         country = country.upper()
         if country not in COUNTRIES_VALID:
@@ -53,7 +53,11 @@ class Nominatim(object):
                           "in 1999.")
         self.country = country
         self._data_path, self._data = self._get_data(country)
-        self._data_unique = self._index_postal_codes()
+        if non_unique:
+            self._data_frame = self._data
+        else:
+            self._data_frame = self._index_postal_codes()
+        self.unique = not non_unique
 
     @staticmethod
     def _get_data(country):
@@ -147,9 +151,9 @@ class Nominatim(object):
             codes = pd.DataFrame(codes, columns=['postal_code'])
 
         codes = self._normalize_postal_code(codes)
-        response = pd.merge(codes, self._data_unique, on='postal_code',
+        response = pd.merge(codes, self._data_frame, on='postal_code',
                             how='left')
-        if single_entry:
+        if self.unique and single_entry:
             response = response.iloc[0]
         return response
 
