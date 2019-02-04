@@ -73,10 +73,10 @@ def test_download_dataset(temp_dir):
 
     assert_array_equal(nomi._data.columns,
                        nomi2._data.columns)
-    assert_array_equal(nomi._data_unique.columns,
-                       nomi2._data_unique.columns)
+    assert_array_equal(nomi._data_frame.columns,
+                       nomi2._data_frame.columns)
     assert nomi._data.shape == nomi._data.shape
-    assert nomi._data_unique.shape == nomi._data_unique.shape
+    assert nomi._data_frame.shape == nomi._data_frame.shape
 
     assert len(res.place_name.split(',')) > 1
     assert len(res2.place_name.split(',')) > 1
@@ -100,13 +100,23 @@ def test_nominatim_query_postal_code():
 
 
 def test_nominatim_query_postal_code_multiple():
-    nomi = Nominatim('de', non_unique=True)
+    nomi = Nominatim('de', unique=False)
+    expected_places = [
+        'Wellen',
+        'Groß Rodensleben',
+        'Irxleben',
+        'Eichenbarleben',
+        'Klein Rodensleben',
+        'Niederndodeleben',
+        'Hohendodeleben',
+        'Ochtmersleben',
+    ]
 
     res = nomi.query_postal_code('39167')
     assert isinstance(res, pd.DataFrame)
-    assert res.shape[0] == 8
-    assert res.place_name.values[0] == 'Eichenbarleben'
-    assert res.place_name.values[7] == 'Ochtmersleben'
+    assert res.shape[0] == len(expected_places)
+    for place in res.place_name.values:
+        assert place in expected_places
 
 
 def test_nominatim_distance_postal_code():
