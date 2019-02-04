@@ -37,9 +37,12 @@ class Nominatim(object):
     Parameters
     ----------
     country: str, default='fr'
-       country conde. See the documentation for a list of supported countries.
+       country code. See the documentation for a list of supported countries.
+    unique: bool, default=True
+        Create unique postcode index, merging all places with the same postcode
+        into a single entry
     """
-    def __init__(self, country='fr'):
+    def __init__(self, country='fr', unique=True):
 
         country = country.upper()
         if country not in COUNTRIES_VALID:
@@ -53,7 +56,11 @@ class Nominatim(object):
                           "in 1999.")
         self.country = country
         self._data_path, self._data = self._get_data(country)
-        self._data_unique = self._index_postal_codes()
+        if unique:
+            self._data_frame = self._index_postal_codes()
+        else:
+            self._data_frame = self._data
+        self.unique = unique
 
     @staticmethod
     def _get_data(country):
@@ -147,9 +154,9 @@ class Nominatim(object):
             codes = pd.DataFrame(codes, columns=['postal_code'])
 
         codes = self._normalize_postal_code(codes)
-        response = pd.merge(codes, self._data_unique, on='postal_code',
+        response = pd.merge(codes, self._data_frame, on='postal_code',
                             how='left')
-        if single_entry:
+        if self.unique and single_entry:
             response = response.iloc[0]
         return response
 
