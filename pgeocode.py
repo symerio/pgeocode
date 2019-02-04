@@ -37,7 +37,10 @@ class Nominatim(object):
     Parameters
     ----------
     country: str, default='fr'
-       country conde. See the documentation for a list of supported countries.
+       country code. See the documentation for a list of supported countries.
+    unique: bool, default=True
+        Create unique postcode index, merging all places with the same postcode
+        into a single entry
     """
     def __init__(self, country='fr', unique=True):
 
