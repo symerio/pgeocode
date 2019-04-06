@@ -1,7 +1,12 @@
 pgeocode
 ========
 
-.. image:: https://travis-ci.org/symerio/pgeocode.svg?branch=master
+|pypi| |travisci|
+
+.. |pypi| image:: https://img.shields.io/pypi/v/pgeocode.svg
+   :target: https://pypi.org/project/pgeocode/
+   
+.. |travisci| image:: https://travis-ci.org/symerio/pgeocode.svg?branch=master
    :target: https://travis-ci.org/symerio/pgeocode
 
 Postal code geocoding and distance calculations
