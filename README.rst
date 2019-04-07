@@ -1,11 +1,14 @@
 pgeocode
 ========
 
-|pypi| |travisci|
+|pypi| |rdfd| |travisci|
 
 .. |pypi| image:: https://img.shields.io/pypi/v/pgeocode.svg
    :target: https://pypi.org/project/pgeocode/
    
+.. |rdfd| image:: https://readthedocs.org/projects/pgeocode/badge/?version=latest
+    :target: http://pgeocode.readthedocs.io/
+
 .. |travisci| image:: https://travis-ci.org/symerio/pgeocode.svg?branch=master
    :target: https://travis-ci.org/symerio/pgeocode
 
@@ -17,6 +20,8 @@ distance queries are also supported.
 The used `GeoNames <http://download.geonames.org/export/zip/>`_ database includes postal codes for 83 countries.
 
 Currently, only queries within the same country are supported.
+
+For additional documentation see `pgeocode.readthedocs.io <https://pgeocode.readthedocs.io>`_.
 
 
 Installation
