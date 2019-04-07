@@ -1,3 +1,4 @@
+requests
 scikit-learn>=0.18
 sphinx
 pillow
