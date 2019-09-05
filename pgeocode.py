@@ -122,7 +122,7 @@ class Nominatim(object):
         elif self.country == 'IE':
             codes['postal_code'] = codes.postal_code.str.split().str.get(0)
         elif self.country == 'CA':
-            codes['postal_code'] = codes.postal_code.str.split().str.get(1)
+            codes['postal_code'] = codes.postal_code.str.split().str.get(0)
         else:
             pass
 
