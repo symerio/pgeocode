@@ -117,11 +117,7 @@ class Nominatim(object):
         """
         codes['postal_code'] = codes.postal_code.str.upper()
 
-        if self.country == 'GB':
-            codes['postal_code'] = codes.postal_code.str.split().str.get(0)
-        elif self.country == 'IE':
-            codes['postal_code'] = codes.postal_code.str.split().str.get(0)
-        elif self.country == 'CA':
+        if self.country in ['GB', 'IE', 'CA']:
             codes['postal_code'] = codes.postal_code.str.split().str.get(0)
         else:
             pass
