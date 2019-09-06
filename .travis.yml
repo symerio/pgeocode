@@ -8,7 +8,7 @@ env:
     - PYTHON_VERSION="2.7"
     - PYTHON_VERSION="3.5" 
     - PYTHON_VERSION="3.6"  PANDAS_VERSION="0.22"
-    - PYTHON_VERSION="3.7"  PANDAS_VERSION="0.23"
+    - PYTHON_VERSION="3.7"  PANDAS_VERSION="0.25"
 
 install: 
     - git clone --depth 1 git://github.com/astropy/ci-helpers.git

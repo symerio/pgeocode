@@ -1,5 +1,11 @@
 # Release notes
 
+## Version 0.1.2
+
+*November 8, 2018*
+
+ - Fix handling of Candian postal codes
+
 ## Version 0.1.1
 
 *November 8, 2018*
