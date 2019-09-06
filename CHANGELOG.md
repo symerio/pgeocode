@@ -4,6 +4,8 @@
 
 *November 8, 2018*
 
+ - Allow looking up all the locations for a postcode with the
+   `unique=False` parameter of `Nominatim`.
  - Fix handling of Candian postal codes
 
 ## Version 0.1.1

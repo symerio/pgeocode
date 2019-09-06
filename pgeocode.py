@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 import pandas as pd
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 STORAGE_DIR = os.path.join(os.path.expanduser('~'),
                            'pgeocode_data')
