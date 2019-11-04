@@ -13,7 +13,7 @@ __version__ = '0.1.2'
 STORAGE_DIR = os.path.join(os.path.expanduser('~'),
                            'pgeocode_data')
 
-DOWNLOAD_URL = "http://download.geonames.org/export/zip/{country}.zip"
+DOWNLOAD_URL = "http://www.geonames.org/export/zip/{country}.zip"
 
 DATA_FIELDS = ['country code', 'postal_code', 'place_name',
                'state_name', 'state_code', 'county_name', 'county_code',
