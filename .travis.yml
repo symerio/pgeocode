@@ -5,23 +5,22 @@ env:
     global:
       CONDA_DEPENDENCIES="numpy pandas test"
     matrix:
-    - PYTHON_VERSION="2.7"
-    - PYTHON_VERSION="3.5" 
-    - PYTHON_VERSION="3.6"  PANDAS_VERSION="0.22"
-    - PYTHON_VERSION="3.7"  PANDAS_VERSION="0.25"
+    - python: 2.7
+      env: REQUIREMENTS="numpy pandas pytest"
+    - python: 3.5
+      env: REQUIREMENTS="numpy pandas==0.22 pytest"
+    - python: 3.6
+      env: REQUIREMENTS="numpy pandas==0.25 pytest"
+    - python: 3.7
+      env: REQUIREMENTS="numpy pandas pytest"
 
 install: 
-    - git clone --depth 1 git://github.com/astropy/ci-helpers.git
-    - source ci-helpers/travis/setup_conda.sh && rm -rf ci-helpers/
-    - |
-        source activate test
-        pip install .
+    - pip install ${REQUIREMENTS}
+    - pip install .
 
 script:
-    - |
-        source activate test
-        py.test -sv .
+    - pytest -sv .
 
 cache:
-  directories:
-     $HOME/download # Sufficient to add miniconda.sh to TRAVIS cache.
+  - directories:
+    - $HOME/.cache/pip
