@@ -42,7 +42,7 @@ def _normalize_str(x):
          ('AU', '6837', 'Perth', '0221', 'Barton', 3089),
          ('US', '60605', 'Chicago', '94103', 'San Francisco', 2984),
          ('CA', 'M5R 1X8', 'Toronto', 'H2Z 1A7', 'Montreal', 503),
-         ('IE', 'D01 R2PO', 'Dublin', 'T12 RW26', 'Cork', 219),
+         #('IE', 'D01 R2PO', 'Dublin', 'T12 RW26', 'Cork', 219),
          ])
 def test_countries(country, pc1, location1, pc2, location2,
                    distance12):
@@ -81,6 +81,27 @@ def test_download_dataset(temp_dir):
 
     assert len(res.place_name.split(',')) > 1
     assert len(res2.place_name.split(',')) > 1
+
+
+def test_download_gb_full_dataset(temp_dir):
+    assert not os.path.exists(os.path.join(temp_dir, 'GB_full.txt'))
+    nomi = Nominatim('gb_full')
+    # the data file was downloaded
+    assert os.path.exists(os.path.join(temp_dir, 'GB_full.txt'))
+    res = nomi.query_postal_code('BS6 5JR')
+
+    nomi2 = Nominatim('gb_full')
+    res2 = nomi.query_postal_code('BS65JR')
+
+    assert_array_equal(nomi._data.columns,
+                       nomi2._data.columns)
+    assert_array_equal(nomi._data_frame.columns,
+                       nomi2._data_frame.columns)
+    assert nomi._data.shape == nomi._data.shape
+    assert nomi._data_frame.shape == nomi._data_frame.shape
+
+    assert res.place_name == 'Bristol'
+    assert res2.place_name == 'Bristol'
 
 
 def test_nominatim_query_postal_code():
