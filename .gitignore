@@ -101,3 +101,7 @@ ENV/
 .mypy_cache/
 _build/
 generated/
+
+# PyCharm
+.idea/
+
