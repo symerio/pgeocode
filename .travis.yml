@@ -1,10 +1,8 @@
 language: python
 sudo: false
 
-env:
-    global:
-      CONDA_DEPENDENCIES="numpy pandas test"
-    matrix:
+matrix:
+  include:
     - python: 2.7
       env: REQUIREMENTS="numpy pandas pytest"
     - python: 3.5
@@ -13,6 +11,9 @@ env:
       env: REQUIREMENTS="numpy pandas==0.25 pytest"
     - python: 3.7
       env: REQUIREMENTS="numpy pandas pytest"
+    - python: 3.8
+      env: REQUIREMENTS="numpy pandas pytest"
+
 
 install: 
     - pip install ${REQUIREMENTS}
