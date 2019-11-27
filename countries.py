@@ -1,5 +1,4 @@
 import warnings
-from typing import Set
 
 
 class Countries:
@@ -15,10 +14,10 @@ class Countries:
                                   "VA", "VI", "WF", "YT", "ZA"}
 
     @property
-    def countries_valid(self) -> Set[str]:
+    def countries_valid(self):
         return self.__countries_valid
 
-    def get_clean_country(self, country: str) -> str:
+    def get_clean_country(self, country):
         country = country.upper()
         if country == 'AR':
             warnings.warn('The Argentina data file contains the first 5 positions of the postal code.')
@@ -32,7 +31,7 @@ class Countries:
                               'countries')
                              .format(country))
 
-    def get_clean_country_for_download_path(self, country: str) -> str:
+    def get_clean_country_for_download_path(self, country):
         country = self.get_clean_country(country)
         if country == 'GB_full':
             return 'GB_full.csv'
