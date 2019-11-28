@@ -42,7 +42,7 @@ def _normalize_str(x):
          ('AU', '6837', 'Perth', '0221', 'Barton', 3089),
          ('US', '60605', 'Chicago', '94103', 'San Francisco', 2984),
          ('CA', 'M5R 1X8', 'Toronto', 'H2Z 1A7', 'Montreal', 503),
-         #('IE', 'D01 R2PO', 'Dublin', 'T12 RW26', 'Cork', 219),
+         ('IE', 'D01 R2PO', 'Dublin', 'T12 RW26', 'Cork', 219),
          ])
 def test_countries(country, pc1, location1, pc2, location2,
                    distance12):
