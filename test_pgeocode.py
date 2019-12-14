@@ -16,6 +16,7 @@ import pgeocode
 from pgeocode import haversine_distance, Nominatim, GeoDistance
 
 
+
 @pytest.fixture
 def temp_dir():
     path_save = pgeocode.STORAGE_DIR
@@ -120,6 +121,13 @@ def test_nominatim_query_postal_code_multiple():
     assert res.shape[0] == len(expected_places)
     for place in res.place_name.values:
         assert place in expected_places
+
+@pytest.mark.slow
+@pytest.mark.parametrize('country', pgeocode.COUNTRIES_VALID)
+def test_nominatim_all_countries(country):
+    nomi = Nominatim(country)
+    res = nomi.query_postal_code('00000')
+    assert isinstance(res, pd.Series)
 
 
 def test_nominatim_distance_postal_code():
