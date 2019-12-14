@@ -3,8 +3,6 @@ sudo: false
 
 matrix:
   include:
-    - python: 2.7
-      env: REQUIREMENTS="numpy pandas pytest"
     - python: 3.5
       env: REQUIREMENTS="numpy pandas==0.22 pytest"
     - python: 3.6
