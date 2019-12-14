@@ -26,6 +26,11 @@ def temp_dir():
     shutil.rmtree(path)
 
 
+@pytest.fixture(scope='session')
+def country_gb_full():
+    return pgeocode._Country('gb_full')
+
+
 def _normalize_str(x):
     if x is np.nan:
         return x
@@ -83,6 +88,27 @@ def test_download_dataset(temp_dir):
 
     assert len(res.place_name.split(',')) > 1
     assert len(res2.place_name.split(',')) > 1
+
+
+def test_download_gb_full_dataset(temp_dir):
+    assert not os.path.exists(os.path.join(temp_dir, 'GB_full.txt'))
+    nomi = Nominatim('gb_full')
+    # the data file was downloaded
+    assert os.path.exists(os.path.join(temp_dir, 'GB_full.txt'))
+    res = nomi.query_postal_code('BS6 5JR')
+
+    nomi2 = Nominatim('gb_full')
+    res2 = nomi.query_postal_code('BS65JR')
+
+    assert_array_equal(nomi._data.columns,
+                       nomi2._data.columns)
+    assert_array_equal(nomi._data_frame.columns,
+                       nomi2._data_frame.columns)
+    assert nomi._data.shape == nomi._data.shape
+    assert nomi._data_frame.shape == nomi._data_frame.shape
+
+    assert res.place_name == 'Bristol'
+    assert res2.place_name == 'Bristol'
 
 
 def test_nominatim_query_postal_code():
@@ -172,3 +198,26 @@ def test_haversine_distance():
     d_pred = haversine_distance(x, y)
     # same distance +/- 3 km
     assert_allclose(d_ref, d_pred, atol=3)
+
+
+def test_that_get_clean_country_raises_value_error():
+    with pytest.raises(ValueError):
+        pgeocode._Country('invalid')
+
+
+def test_that_get_clean_country_handles_gb_full(country_gb_full):
+    assert country_gb_full.name == 'GB_full'
+
+
+def test_that_get_clean_country_works_for_valid_countries():
+    country_obj = pgeocode._Country('ES')
+    assert country_obj.name == 'ES'
+
+
+def test_that_get_download_path_handles_gb_full(country_gb_full):
+    assert country_gb_full.get_download_path() == "https://download.geonames.org/export/zip/GB_full.csv.zip"
+
+
+def test_that_get_download_path_works_for_valid_countries():
+    country_obj = pgeocode._Country('CA')
+    assert country_obj.get_download_path() == "https://download.geonames.org/export/zip/CA.zip"

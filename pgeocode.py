@@ -4,31 +4,23 @@
 
 import os
 import warnings
+from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
+from pandas.io.common import get_filepath_or_buffer
 
 __version__ = '0.1.2'
 
 STORAGE_DIR = os.path.join(os.path.expanduser('~'),
                            'pgeocode_data')
 
-DOWNLOAD_URL = "http://download.geonames.org/export/zip/{country}.zip"
+DOWNLOAD_URL = "https://download.geonames.org/export/zip/{country}.zip"
 
 DATA_FIELDS = ['country code', 'postal_code', 'place_name',
                'state_name', 'state_code', 'county_name', 'county_code',
                'community_name', 'community_code',
                'latitude', 'longitude', 'accuracy']
-
-COUNTRIES_VALID = ["AD", "AR", "AS", "AT", "AU", "AX", "BD", "BE", "BG", "BM",
-                   "BR", "BY", "CA", "CH", "CO", "CR", "CZ", "DE", "DK", "DO",
-                   "DZ", "ES", "FI", "FO", "FR", "GB", "GF", "GG", "GL", "GP",
-                   "GT", "GU", "HR", "HU", "IE", "IM", "IN", "IS", "IT", "JE",
-                   "JP", "LI", "LK", "LT", "LU", "LV", "MC", "MD", "MH", "MK",
-                   "MP", "MQ", "MT", "MX", "MY", "NC", "NL", "NO", "NZ", "PH",
-                   "PK", "PL", "PM", "PR", "PT", "RE", "RO", "RU", "SE", "SI",
-                   "SJ", "SK", "SM", "TH", "TR", "UA", "US", "UY", "VA", "VI",
-                   "WF", "YT", "ZA"]
 
 
 class Nominatim(object):
@@ -43,41 +35,25 @@ class Nominatim(object):
         into a single entry
     """
     def __init__(self, country='fr', unique=True):
-
-        country = country.upper()
-        if country not in COUNTRIES_VALID:
-            raise ValueError(('country={} is not a known country code. '
-                              'See the README for a list of supported '
-                              'countries')
-                             .format(country))
-        if country == 'AR':
-            warnings.warn("The Argentina data file contains 4-digit postal "
-                          "codes which were replaced with a new system "
-                          "in 1999.")
-        self.country = country
-        self._data_path, self._data = self._get_data(country)
+        country_obj = _Country(country)
+        self.country = country_obj.name
+        self.download_path = country_obj.get_download_path()
+        self._data_path, self._data = self._get_data(self.country)
         if unique:
             self._data_frame = self._index_postal_codes()
         else:
             self._data_frame = self._data
         self.unique = unique
 
-    @staticmethod
-    def _get_data(country):
+    def _get_data(self, country):
         """Load the data from disk; otherwise download and save it"""
-        from zipfile import ZipFile
-        from pandas.io.common import get_filepath_or_buffer, _infer_compression
-        data_path = os.path.join(STORAGE_DIR,
-                                 country.upper() + '.txt')
+        data_path = os.path.join(STORAGE_DIR, country + '.txt')
         if os.path.exists(data_path):
-            data = pd.read_csv(data_path,
-                               dtype={'postal_code': str})
+            data = pd.read_csv(data_path, dtype={'postal_code': str})
         else:
-            url = DOWNLOAD_URL.format(country=country)
-            compression = _infer_compression(url, "zip")
-            reader, encoding, compression = get_filepath_or_buffer(url)[:3]
+            reader, encoding, compression = get_filepath_or_buffer(self.download_path)[:3]
             with ZipFile(reader) as fh_zip:
-                with fh_zip.open(country.upper() + '.txt') as fh:
+                with fh_zip.open(country + '.txt') as fh:
                     data = pd.read_csv(fh,
                                        sep='\t', header=0,
                                        names=DATA_FIELDS,
@@ -107,6 +83,8 @@ class Nominatim(object):
                 data_unique[key] = df_unique_cp_group[key].first()
             data_unique = data_unique.reset_index()[DATA_FIELDS]
             data_unique.to_csv(data_path_unique, index=None)
+            if self.country == 'GB_full':
+                data_unique['postal_code'] = data_unique['postal_code'].str.replace(' ', '')
         return data_unique
 
     def _normalize_postal_code(self, codes):
@@ -119,6 +97,8 @@ class Nominatim(object):
 
         if self.country in ['GB', 'IE', 'CA']:
             codes['postal_code'] = codes.postal_code.str.split().str.get(0)
+        elif self.country == 'GB_full':
+            codes['postal_code'] = codes.postal_code.str.replace(' ', '')
         else:
             pass
 
@@ -157,8 +137,43 @@ class Nominatim(object):
         return response
 
     def query_location(self, name):
-        """Get locations information from a community/minicipality name"""
+        """Get locations information from a community/municipality name"""
         pass
+
+
+class _Country:
+    def __init__(self, country_code):
+        self.countries_valid = {"AD", "AR", "AS", "AT", "AU", "AX", "BD", "BE", "BG", "BM",
+                                  "BR", "BY", "CA", "CH", "CO", "CR", "CZ", "DE", "DK", "DO",
+                                  "DZ", "ES", "FI", "FO", "FR", "GB", "GB_full", "GF", "GG",
+                                  "GL", "GP", "GT", "GU", "HR", "HU", "IE", "IM", "IN", "IS",
+                                  "IT", "JE", "JP", "LI", "LK", "LT", "LU", "LV", "MC", "MD",
+                                  "MH", "MK", "MP", "MQ", "MT", "MX", "MY", "NC", "NL", "NO",
+                                  "NZ", "PH", "PK", "PL", "PM", "PR", "PT", "RE", "RO", "RU",
+                                  "SE", "SI", "SJ", "SK", "SM", "TH", "TR", "UA", "US", "UY",
+                                  "VA", "VI", "WF", "YT", "ZA"}
+        self.name = self.get_clean_country(country_code)
+
+    def get_clean_country(self, country_code):
+        country_code = country_code.upper()
+        if country_code == 'AR':
+            warnings.warn('The Argentina data file contains the first 5 positions of the postal code.')
+        if country_code == 'GB_FULL':
+            return 'GB_full'
+        if country_code in self.countries_valid:
+            return country_code
+        else:
+            raise ValueError(('country={} is not a known country code. '
+                              'See the README for a list of supported '
+                              'countries')
+                             .format(country_code))
+
+    def get_download_path(self):
+        if self.name == 'GB_full':
+            name = 'GB_full.csv'
+        else:
+            name = self.name
+        return DOWNLOAD_URL.format(country=name)
 
 
 class GeoDistance(Nominatim):
