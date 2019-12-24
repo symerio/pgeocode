@@ -4,6 +4,8 @@
 
 import os
 import warnings
+import urllib.request
+from io import BytesIO
 
 import numpy as np
 import pandas as pd
@@ -13,7 +15,7 @@ __version__ = '0.1.2'
 STORAGE_DIR = os.path.join(os.path.expanduser('~'),
                            'pgeocode_data')
 
-DOWNLOAD_URL = "http://download.geonames.org/export/zip/{country}.zip"
+DOWNLOAD_URL = "https://download.geonames.org/export/zip/{country}.zip"
 
 DATA_FIELDS = ['country code', 'postal_code', 'place_name',
                'state_name', 'state_code', 'county_name', 'county_code',
@@ -29,6 +31,14 @@ COUNTRIES_VALID = ["AD", "AR", "AS", "AT", "AU", "AX", "BD", "BE", "BG", "BM",
                    "PK", "PL", "PM", "PR", "PT", "RE", "RO", "RU", "SE", "SI",
                    "SJ", "SK", "SM", "TH", "TR", "UA", "US", "UY", "VA", "VI",
                    "WF", "YT", "ZA"]
+
+def _get_url(url):
+    """Download contents for a URL"""
+    res = urllib.request.urlopen(url)
+    reader = BytesIO(res.read())
+    res.close()
+    return reader, res.headers
+
 
 
 class Nominatim(object):
@@ -66,7 +76,6 @@ class Nominatim(object):
     def _get_data(country):
         """Load the data from disk; otherwise download and save it"""
         from zipfile import ZipFile
-        from pandas.io.common import get_filepath_or_buffer, _infer_compression
         data_path = os.path.join(STORAGE_DIR,
                                  country.upper() + '.txt')
         if os.path.exists(data_path):
@@ -74,8 +83,7 @@ class Nominatim(object):
                                dtype={'postal_code': str})
         else:
             url = DOWNLOAD_URL.format(country=country)
-            compression = _infer_compression(url, "zip")
-            reader, encoding, compression = get_filepath_or_buffer(url)[:3]
+            reader, headers = _get_url(url)
             with ZipFile(reader) as fh_zip:
                 with fh_zip.open(country.upper() + '.txt') as fh:
                     data = pd.read_csv(fh,
