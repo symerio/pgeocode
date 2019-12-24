@@ -1,5 +1,12 @@
 # Release notes
 
+## Version 0.2.0
+
+*December 24, 2018*
+
+ - Fix download URL.
+ - Drop Python 2.7 support.
+
 ## Version 0.1.2
 
 *November 8, 2018*

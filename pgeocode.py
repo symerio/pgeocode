@@ -10,7 +10,7 @@ from io import BytesIO
 import numpy as np
 import pandas as pd
 
-__version__ = '0.1.2'
+__version__ = '0.2.0'
 
 STORAGE_DIR = os.path.join(os.path.expanduser('~'),
                            'pgeocode_data')
