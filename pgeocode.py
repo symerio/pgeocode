@@ -32,6 +32,7 @@ COUNTRIES_VALID = ["AD", "AR", "AS", "AT", "AU", "AX", "BD", "BE", "BG", "BM",
                    "SJ", "SK", "SM", "TH", "TR", "UA", "US", "UY", "VA", "VI",
                    "WF", "YT", "ZA"]
 
+
 def _get_url(url):
     """Download contents for a URL"""
     res = urllib.request.urlopen(url)
@@ -87,7 +88,7 @@ class Nominatim(object):
             with ZipFile(reader) as fh_zip:
                 with fh_zip.open(country.upper() + '.txt') as fh:
                     data = pd.read_csv(fh,
-                                       sep='\t', header=0,
+                                       sep='\t', header=None,
                                        names=DATA_FIELDS,
                                        dtype={'postal_code': str})
             if not os.path.exists(STORAGE_DIR):
@@ -110,7 +111,8 @@ class Nominatim(object):
             data_unique = df_unique_cp_group[['latitude', 'longitude']].mean()
             valid_keys = set(DATA_FIELDS).difference(
                     ['place_name', 'lattitude', 'longitude', 'postal_code'])
-            data_unique['place_name'] = df_unique_cp_group['place_name'].apply(', '.join)  # noqa
+            data_unique['place_name'] = df_unique_cp_group['place_name'].apply(
+                    lambda x: ', '.join([str(el) for el in x]))
             for key in valid_keys:
                 data_unique[key] = df_unique_cp_group[key].first()
             data_unique = data_unique.reset_index()[DATA_FIELDS]

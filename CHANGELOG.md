@@ -1,5 +1,12 @@
 # Release notes
 
+## Version 0.2.1
+
+*In developpement*
+
+ - Fix ``Nominatim`` for AS, LT, VA countries.
+ - Drop Python 2.7 support.
+
 ## Version 0.2.0
 
 *December 24, 2018*
