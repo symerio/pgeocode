@@ -22,30 +22,16 @@ DATA_FIELDS = ['country code', 'postal_code', 'place_name',
                'community_name', 'community_code',
                'latitude', 'longitude', 'accuracy']
 
-COUNTRIES_VALID = [
-    "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AN", "AO", "AQ", "AR", "AS",
-    "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH",
-    "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW",
-    "BY", "BZ", "CA", "CC", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM",
-    "CN", "CO", "CR", "CS", "CU", "CV", "CW", "CX", "CY", "CZ", "DE", "DJ",
-    "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES", "ET", "FI",
-    "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH",
-    "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY",
-    "HK", "HM", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN", "IO",
-    "IQ", "IR", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI",
-    "KM", "KN", "KP", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK",
-    "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG",
-    "MH", "MK", "ML", "MM", "MN", "MO", "MP", "MQ", "MR", "MS", "MT", "MU",
-    "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NF", "NG", "NI", "NL",
-    "NO", "NP", "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK",
-    "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY", "QA", "RE", "RO", "RS",
-    "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK",
-    "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ", "TC",
-    "TD", "TF", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT",
-    "TV", "TW", "TZ", "UA", "UG", "UM", "US", "UY", "UZ", "VA", "VC", "VE",
-    "VG", "VI", "VN", "VU", "WF", "WS", "XK", "YE", "YT", "YU", "ZA", "ZM",
-    "ZW"
-]
+COUNTRIES_VALID = ["AD", "AR", "AS", "AT", "AU", "AX", "BD", "BE", "BG", "BM",
+                   "BR", "BY", "CA", "CH", "CO", "CR", "CZ", "DE", "DK", "DO",
+                   "DZ", "ES", "FI", "FO", "FR", "GB", "GF", "GG", "GL", "GP",
+                   "GT", "GU", "HR", "HU", "IE", "IM", "IN", "IS", "IT", "JE",
+                   "JP", "LI", "LK", "LT", "LU", "LV", "MC", "MD", "MH", "MK",
+                   "MP", "MQ", "MT", "MX", "MY", "NC", "NL", "NO", "NZ", "PH",
+                   "PK", "PL", "PM", "PR", "PT", "RE", "RO", "RU", "SE", "SI",
+                   "SJ", "SK", "SM", "TH", "TR", "UA", "US", "UY", "VA", "VI",
+                   "WF", "YT", "ZA"]
+
 
 def _get_url(url):
     """Download contents for a URL"""
@@ -102,7 +88,7 @@ class Nominatim(object):
             with ZipFile(reader) as fh_zip:
                 with fh_zip.open(country.upper() + '.txt') as fh:
                     data = pd.read_csv(fh,
-                                       sep='\t', header=0,
+                                       sep='\t', header=None,
                                        names=DATA_FIELDS,
                                        dtype={'postal_code': str})
             if not os.path.exists(STORAGE_DIR):
@@ -121,13 +107,12 @@ class Nominatim(object):
         else:
 
             # group together places with the same postal code
-            if self._data.shape[0] == 0:
-                raise ValueError('Loaded postal code database is empty.')
             df_unique_cp_group = self._data.groupby('postal_code')
             data_unique = df_unique_cp_group[['latitude', 'longitude']].mean()
             valid_keys = set(DATA_FIELDS).difference(
                     ['place_name', 'lattitude', 'longitude', 'postal_code'])
-            data_unique['place_name'] = df_unique_cp_group['place_name'].apply(', '.join)  # noqa
+            data_unique['place_name'] = df_unique_cp_group['place_name'].apply(
+                    lambda x: ', '.join([str(el) for el in x]))
             for key in valid_keys:
                 data_unique[key] = df_unique_cp_group[key].first()
             data_unique = data_unique.reset_index()[DATA_FIELDS]
