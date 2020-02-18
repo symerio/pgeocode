@@ -12,8 +12,10 @@ import pandas as pd
 
 __version__ = '0.2.0'
 
-STORAGE_DIR = os.path.join(os.path.expanduser('~'),
-                           'pgeocode_data')
+STORAGE_DIR = os.environ.get(
+     "PGEOCODE_DATA_DIR",
+     os.path.join(os.path.expanduser('~'), 'pgeocode_data')
+)
 
 DOWNLOAD_URL = "https://download.geonames.org/export/zip/{country}.zip"
 

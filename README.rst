@@ -92,6 +92,16 @@ The result of a geo-localistion query is a ``pandas.DataFrame`` with the followi
 * ``longitude``   : estimated longitude (wgs84)
 * ``accuracy``    : accuracy of lat/lng from 1=estimated to 6=centroid
 
+
+Configuration and defaults
+--------------------------
+
+**Storage directory**
+
+Defaults to ``~/pgeocode_data``, it is the directory where data is downloaded
+for later consumption. It can be changed using the environment variable
+``PGEOCODE_DATA_DIR``, i.e. ``export PGEOCODE_DATA_DIR=/tmp/pgeocode_data``.
+
 License
 -------
 

@@ -6,6 +6,7 @@
 
  - Fix ``Nominatim`` for AS, LT, VA countries.
  - Drop Python 2.7 support.
+ - Allow custom download locations.
 
 ## Version 0.2.0
 
