@@ -2,7 +2,7 @@
 
 ## Version 0.2.1
 
-*In developpement*
+*February 21, 2019*
 
  - Fix ``Nominatim`` for AS, LT, VA countries.
  - Drop Python 2.7 support.
@@ -10,14 +10,14 @@
 
 ## Version 0.2.0
 
-*December 24, 2018*
+*December 24, 2019*
 
  - Fix download URL.
  - Drop Python 2.7 support.
 
 ## Version 0.1.2
 
-*November 8, 2018*
+*November 8, 2019*
 
  - Allow looking up all the locations for a postcode with the
    `unique=False` parameter of `Nominatim`.

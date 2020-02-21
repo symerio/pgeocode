@@ -10,7 +10,7 @@ from io import BytesIO
 import numpy as np
 import pandas as pd
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 STORAGE_DIR = os.environ.get(
      "PGEOCODE_DATA_DIR",
