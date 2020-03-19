@@ -241,6 +241,75 @@ class GeoDistance(Nominatim):
             return dist[0]
         else:
             return dist
+     
+class StateLookup(Nominatim):
+
+    def __init__(self, country='us'):
+        super().__init__(country=country, unique=False)
+        self._data_frame = self._index_states()
+
+    def _index_states(self):
+        """ Create a dataframe with unique postal codes """
+        data_path_states = self._data_path.replace('.txt', '-states.txt')
+
+        if os.path.exists(data_path_states):
+            data_unique = pd.read_csv(data_path_states, dtype={'state_code': str})
+        else:
+            # group together places with the same state code
+            df_unique_cp_group = self._data.groupby('state_code')
+            data_unique = df_unique_cp_group[['postal_code']].first()
+            valid_keys = set(DATA_FIELDS).difference(['state_code'])
+            for key in valid_keys:
+                data_unique[key] = df_unique_cp_group[key].first()
+            data_unique = data_unique.reset_index()[['state_name', 'state_code']].dropna()
+            data_unique.to_csv(data_path_states, index=None, columns=['state_name', 'state_code'])
+        return data_unique
+
+    def query_state(self, query):
+        """
+        Get a list of states matching a query.
+        :return:
+        """
+        data = self._data_frame
+        bool_series = data["state_name"].str.lower().str.startswith(query.lower(), na=False)
+        return data[bool_series]
+
+
+class CityLookup(StateLookup):
+
+    def __init__(self, country='us', state='NY'):
+        super().__init__(country=country)
+        self._data_frame = self._index_cities(state)
+
+    def _index_cities(self, state):
+        """ Create a dataframe with unique postal codes """
+        data_path_states = self._data_path.replace('.txt', '-{}-cities.txt'.format(state))
+
+        if os.path.exists(data_path_states):
+            data_unique = pd.read_csv(data_path_states, dtype={'county_code': str})
+        else:
+            # group together places with the same place name
+            df_unique_cp_group = self._data[self._data['state_code'] == state].groupby('place_name')
+            data_unique = df_unique_cp_group[['postal_code', 'county_name']].first()
+            valid_keys = set(DATA_FIELDS).difference(['place_name'])
+            for key in valid_keys:
+                data_unique[key] = df_unique_cp_group[key].first()
+            data_unique = data_unique.reset_index()[['place_name', 'county_name', 'county_code', 'postal_code']]\
+                .fillna(value='')
+            data_unique.to_csv(data_path_states, index=None)
+        return data_unique
+
+    def query_city(self, query):
+        """
+        Get a list of cities matching a query.
+        :param state:
+        :param query:
+        :return:
+        """
+        data = self._data_frame
+        bool_series = data["place_name"].str.lower().str.startswith(query.lower(), na=False)
+        return data[bool_series]
+
 
 
 # Copied from geopy
