@@ -55,6 +55,8 @@ def test_countries(country, pc1, location1, pc2, location2,
     assert isinstance(res, pd.Series)
     assert _normalize_str(location1) in _normalize_str(res.place_name)
 
+    assert isinstance(res, pd.Series)
+
     res = nomi.query_postal_code(pc2)
     assert isinstance(res, pd.Series)
     assert _normalize_str(location2) in _normalize_str(res.place_name)
