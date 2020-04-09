@@ -19,7 +19,7 @@ STORAGE_DIR = os.environ.get(
 
 DOWNLOAD_URL = "https://download.geonames.org/export/zip/{country}.zip"
 
-DATA_FIELDS = ['country code', 'postal_code', 'place_name',
+DATA_FIELDS = ['country_code', 'postal_code', 'place_name',
                'state_name', 'state_code', 'county_name', 'county_code',
                'community_name', 'community_code',
                'latitude', 'longitude', 'accuracy']
