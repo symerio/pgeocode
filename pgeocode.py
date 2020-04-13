@@ -10,11 +10,14 @@ from io import BytesIO
 import numpy as np
 import pandas as pd
 
+from models import check_is_valid_zip_code
+
+
 __version__ = '0.2.1'
 
 STORAGE_DIR = os.environ.get(
-     "PGEOCODE_DATA_DIR",
-     os.path.join(os.path.expanduser('~'), 'pgeocode_data')
+    "PGEOCODE_DATA_DIR",
+    os.path.join(os.path.expanduser('~'), 'pgeocode_data')
 )
 
 DOWNLOAD_URL = "https://download.geonames.org/export/zip/{country}.zip"
@@ -41,7 +44,6 @@ def _get_url(url):
     reader = BytesIO(res.read())
     res.close()
     return reader, res.headers
-
 
 
 class Nominatim(object):
@@ -112,9 +114,9 @@ class Nominatim(object):
             df_unique_cp_group = self._data.groupby('postal_code')
             data_unique = df_unique_cp_group[['latitude', 'longitude']].mean()
             valid_keys = set(DATA_FIELDS).difference(
-                    ['place_name', 'lattitude', 'longitude', 'postal_code'])
+                ['place_name', 'lattitude', 'longitude', 'postal_code'])
             data_unique['place_name'] = df_unique_cp_group['place_name'].apply(
-                    lambda x: ', '.join([str(el) for el in x]))
+                lambda x: ', '.join([str(el) for el in x]))
             for key in valid_keys:
                 data_unique[key] = df_unique_cp_group[key].first()
             data_unique = data_unique.reset_index()[DATA_FIELDS]
@@ -155,8 +157,14 @@ class Nominatim(object):
         if isinstance(codes, str):
             codes = [codes]
             single_entry = True
+            if self.country == 'BR':
+                warnings.warn(check_is_valid_zip_code(codes))
         else:
             single_entry = False
+            # warnings.warn(msg)
+            if self.country == 'BR':
+                [warnings.warn(msg) for msg in list(
+                    map(check_is_valid_zip_code, codes))]
 
         if not isinstance(codes, pd.DataFrame):
             codes = pd.DataFrame(codes, columns=['postal_code'])
@@ -281,8 +289,8 @@ def haversine_distance(x, y):
     x_lat = x_rad[:, 0]
     y_lat = y_rad[:, 0]
 
-    a = np.sin(dlat/2.0)**2 + \
-        np.cos(x_lat) * np.cos(y_lat) * np.sin(dlon/2.0)**2
+    a = np.sin(dlat / 2.0)**2 + \
+        np.cos(x_lat) * np.cos(y_lat) * np.sin(dlon / 2.0)**2
 
     c = 2 * np.arcsin(np.sqrt(a))
     return EARTH_RADIUS * c
