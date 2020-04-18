@@ -5,7 +5,7 @@ pgeocode
 
 .. |pypi| image:: https://img.shields.io/pypi/v/pgeocode.svg
    :target: https://pypi.org/project/pgeocode/
-   
+
 .. |rdfd| image:: https://readthedocs.org/projects/pgeocode/badge/?version=latest
     :target: http://pgeocode.readthedocs.io/
 

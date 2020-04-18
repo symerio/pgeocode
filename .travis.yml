@@ -13,7 +13,7 @@ matrix:
       env: REQUIREMENTS="numpy pandas pytest"
 
 
-install: 
+install:
     - pip install ${REQUIREMENTS}
     - pip install .
 
