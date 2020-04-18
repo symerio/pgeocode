@@ -1,16 +1,17 @@
 pgeocode
 ========
 
-|pypi| |rdfd| |travisci|
+|pypi| |rdfd| |GHactions|
 
 .. |pypi| image:: https://img.shields.io/pypi/v/pgeocode.svg
    :target: https://pypi.org/project/pgeocode/
-   
+
 .. |rdfd| image:: https://readthedocs.org/projects/pgeocode/badge/?version=latest
     :target: http://pgeocode.readthedocs.io/
 
-.. |travisci| image:: https://travis-ci.org/symerio/pgeocode.svg?branch=master
-   :target: https://travis-ci.org/symerio/pgeocode
+.. |GHactions| image:: https://github.com/symerio/pgeocode/workflows/Test/badge.svg
+   :target: https://github.com/symerio/pgeocode/actions?query=branch%3Amaster+
+
 
 Postal code geocoding and distance calculations
 
