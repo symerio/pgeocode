@@ -1,7 +1,7 @@
 pgeocode
 ========
 
-|pypi| |rdfd| |travisci|
+|pypi| |rdfd| |GHactions|
 
 .. |pypi| image:: https://img.shields.io/pypi/v/pgeocode.svg
    :target: https://pypi.org/project/pgeocode/
@@ -9,7 +9,7 @@ pgeocode
 .. |rdfd| image:: https://readthedocs.org/projects/pgeocode/badge/?version=latest
     :target: http://pgeocode.readthedocs.io/
 
-.. |GH actions| image:: https://github.com/symerio/pgeocode/workflows/Test/badge.svg
+.. |GHactions| image:: https://github.com/symerio/pgeocode/workflows/Test/badge.svg
    :target: https://github.com/symerio/pgeocode/actions?query=branch%3Amaster+
 
 
