@@ -23,4 +23,3 @@ install:
 test_script:
   - activate spotlight-env
   - pytest -sv
-

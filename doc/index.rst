@@ -10,4 +10,5 @@ Pgeocode
    :caption: Contents:
 
    overview
+   contributing
    api
