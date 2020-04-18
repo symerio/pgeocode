@@ -9,8 +9,9 @@ pgeocode
 .. |rdfd| image:: https://readthedocs.org/projects/pgeocode/badge/?version=latest
     :target: http://pgeocode.readthedocs.io/
 
-.. |travisci| image:: https://travis-ci.org/symerio/pgeocode.svg?branch=master
-   :target: https://travis-ci.org/symerio/pgeocode
+.. |GH actions| image:: https://github.com/symerio/pgeocode/workflows/Test/badge.svg
+   :target: https://github.com/symerio/pgeocode/actions?query=branch%3Amaster+
+
 
 Postal code geocoding and distance calculations
 
