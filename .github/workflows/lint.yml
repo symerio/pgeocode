@@ -31,4 +31,4 @@ jobs:
         pip install -e .
     - name: Lint
       run: |
-        pre-commit run -a || git diff && exit 1
+        pre-commit run -a || echo "See https://pgeocode.readthedocs.io/en/latest/contributing.html" && git diff && exit 1
