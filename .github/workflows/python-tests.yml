@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -26,6 +26,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        if [ ${{ matrix.python-version }} == 3.6 ]
+        then
+           pip install numpy==1.13.3 pandas==0.25
+        fi
+
         pip install -e .
     - name: Lint with flake8
       run: |
