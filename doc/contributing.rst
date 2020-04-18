@@ -16,7 +16,7 @@ Unit tests can be run with,
 Code style
 ----------
 
-Pgeocode uses black, flake8 and isort for the code style.
+Pgeocode uses black and flake8 for the code style.
 
 To apply them automatically, install `pre-commmit <https://pre-commit.com/#install>`_
 
