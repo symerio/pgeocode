@@ -29,7 +29,6 @@ Intended Audience :: Developers
 License :: OSI Approved :: BSD License
 Programming Language :: Python
 Programming Language :: Python :: 3
-Programming Language :: Python :: 3.5
 Programming Language :: Python :: 3.6
 Programming Language :: Python :: 3.7
 Programming Language :: Python :: 3.8
@@ -47,6 +46,7 @@ setup(
     author="Roman Yurchak",
     author_email="roman.yurchak@symerio.com",
     py_modules=["pgeocode"],
+    python_requires=">=3.6",
     install_requires=["requests", "numpy", "pandas"],
     classifiers=[_f for _f in CLASSIFIERS.split("\n") if _f],
     license="BSD",
