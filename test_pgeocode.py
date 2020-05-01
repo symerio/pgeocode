@@ -1,4 +1,3 @@
-# -*- coding: utf8 -*-
 # License 3-clause BSD
 #
 # Authors: Roman Yurchak <roman.yurchak@symerio.com>

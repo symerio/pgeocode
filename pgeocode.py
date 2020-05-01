@@ -128,7 +128,7 @@ def _get_url(url):
     return reader, res.headers
 
 
-class Nominatim(object):
+class Nominatim:
     """Query geographical location from a city name or a postal code
 
     Parameters
@@ -283,7 +283,7 @@ class GeoDistance(Nominatim):
     """
 
     def __init__(self, country="fr", errors="ignore"):
-        super(GeoDistance, self).__init__(country)
+        super().__init__(country)
 
     def query_postal_code(self, x, y):
         """ Get distance (in km) between postal codes
@@ -311,7 +311,7 @@ class GeoDistance(Nominatim):
             single_x_entry = True
         else:
             single_x_entry = False
-        df_x = super(GeoDistance, self).query_postal_code(x)
+        df_x = super().query_postal_code(x)
 
         if isinstance(y, str):
             y = [y]
@@ -319,7 +319,7 @@ class GeoDistance(Nominatim):
         else:
             single_y_entry = False
 
-        df_y = super(GeoDistance, self).query_postal_code(y)
+        df_y = super().query_postal_code(y)
 
         x_coords = df_x[["latitude", "longitude"]].values
         y_coords = df_y[["latitude", "longitude"]].values

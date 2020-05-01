@@ -21,6 +21,7 @@ import os
 import sys
 
 import pgeocode
+from typing import Any
 
 sys.path.insert(0, os.path.abspath("../"))
 sys.path.insert(0, os.path.abspath("sphinxext"))
@@ -127,7 +128,7 @@ htmlhelp_basename = "pgeocodedoc"
 
 # -- Options for LaTeX output ---------------------------------------------
 
-latex_elements = {
+latex_elements: Any = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
