@@ -26,6 +26,9 @@ jobs:
         if [ ${{ matrix.python-version }} == 3.6 ]
         then
            pip install numpy==1.13.3 pandas==0.25
+        elif [ ${{ matrix.python-version }} == 'pypy3' ]
+        then
+           pip install --extra-index-url https://antocuni.github.io/pypy-wheels/manylinux2010 numpy pandas
         fi
 
         pip install -e .
