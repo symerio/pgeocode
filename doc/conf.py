@@ -21,10 +21,12 @@ import os
 import sys
 
 import pgeocode
-from github_link import make_linkcode_resolve
+from typing import Any
 
 sys.path.insert(0, os.path.abspath("../"))
 sys.path.insert(0, os.path.abspath("sphinxext"))
+
+from github_link import make_linkcode_resolve  # noqa
 
 
 # -- General configuration ------------------------------------------------
@@ -126,7 +128,7 @@ htmlhelp_basename = "pgeocodedoc"
 
 # -- Options for LaTeX output ---------------------------------------------
 
-latex_elements = {
+latex_elements: Any = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
