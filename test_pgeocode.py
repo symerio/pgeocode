@@ -11,7 +11,7 @@ import pytest
 from numpy.testing import assert_allclose, assert_array_equal
 
 import pgeocode
-from pgeocode import GeoDistance, Nominatim, haversine_distance
+from pgeocode import GeoDistance, Nominatim, haversine_distance, _CheckPostalCode
 
 
 @pytest.fixture
@@ -179,3 +179,20 @@ def test_haversine_distance():
     d_pred = haversine_distance(x, y)
     # same distance +/- 3 km
     assert_allclose(d_ref, d_pred, atol=3)
+
+
+class TestCheckPostalCode():
+    """ Test for class CheckPostalCode"""
+    a = _CheckPostalCode("BR")
+
+    def test_is_valid_zip_brazil_false(self, zip_code='69000-010'):
+        assert False == self.a._is_valid_zip_brazil(zip_code)
+
+    def test_check_is_valid_zip_code_false(self, zip_code="69000-010"):
+        assert self.a._check_is_valid_zip_code(zip_code) == False
+
+    def test_is_valid_zip_brazil_true(self, zip_code='69000-000'):
+        assert True == self.a._is_valid_zip_brazil(zip_code)
+
+    def test_check_is_valid_zip_code_true(self, zip_code="69000-000"):
+        assert self.a._check_is_valid_zip_code(zip_code) == True
