@@ -249,13 +249,15 @@ class Nominatim:
             codes = str(codes)
 
         if isinstance(codes, str):
-            codes = [codes]
+            code = [codes]
             single_entry = True
             test = _CheckPostalCode(code)
             try:
                 if not test():
-                    warnings.warn(f'{code} is a invalid postal code for {self.country}')
-            except NotImplementedError as e:
+                    warnings.warn(
+                        f"{code} is a invalid postal code for {self.country}"
+                    )
+            except NotImplementedError:
                 pass
         else:
             single_entry = False
@@ -263,8 +265,11 @@ class Nominatim:
                 test = _CheckPostalCode(code)
                 try:
                     if not test():
-                        warnings.warn(f'{code} is a invalid postal code for {self.country}')
-                except NotImplementedError as e:
+                        warnings.warn(
+                            f"{code} is a invalid"
+                            + f"postal code for {self.country}"
+                        )
+                except NotImplementedError:
                     pass
 
         if not isinstance(codes, pd.DataFrame):
@@ -401,7 +406,7 @@ def haversine_distance(x, y):
     return EARTH_RADIUS * c
 
 
-class _CheckPostalCode():
+class _CheckPostalCode:
     def __init__(self, country):
         self.country = country
         self.implemented = ["BR"]
@@ -416,18 +421,18 @@ class _CheckPostalCode():
         # in the Brazil de zip_codes valids in Geoname are terminated
         # with 000 e have 8 digits
         if isinstance(zip_code, list):
-            zip_code = ''.join(zip_code)
-        if isinstance(zip_code, str) and zip_code.find('-') != -1:
-            zip_code = ''.join(zip_code.split('-'))
+            zip_code = "".join(zip_code)
+        if isinstance(zip_code, str) and zip_code.find("-") != -1:
+            zip_code = "".join(zip_code.split("-"))
 
         if not isinstance(zip_code, str):
             zip_code = str(zip_code)
 
-        return all([len(zip_code) == 8, zip_code[5:] == '000'])
+        return all([len(zip_code) == 8, zip_code[5:] == "000"])
 
     def _check_is_valid_zip_code(self, zip_code):
         # each country have a deferent postal code format
         if isinstance(zip_code, list):
-            zip_code = ''.join(zip_code)
+            zip_code = "".join(zip_code)
 
         return self._is_valid_zip_brazil(zip_code)
