@@ -249,22 +249,22 @@ class Nominatim:
             codes = str(codes)
 
         if isinstance(codes, str):
-            code = [codes]
+            codes = [codes]
             single_entry = True
-            test = _CheckPostalCode(code)
+            check_zip_code = _CheckPostalCode(codes)
             try:
-                if not test():
+                if not check_zip_code(codes):
                     warnings.warn(
-                        f"{code} is a invalid postal code for {self.country}"
+                        f"{codes} is a invalid postal code for {self.country}"
                     )
             except NotImplementedError:
                 pass
         else:
             single_entry = False
             for code in codes:
-                test = _CheckPostalCode(code)
+                check_zip_code = _CheckPostalCode(code)
                 try:
-                    if not test():
+                    if not check_zip_code(code):
                         warnings.warn(
                             f"{code} is a invalid"
                             + f"postal code for {self.country}"
