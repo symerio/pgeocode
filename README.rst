@@ -103,6 +103,27 @@ Defaults to ``~/pgeocode_data``, it is the directory where data is downloaded
 for later consumption. It can be changed using the environment variable
 ``PGEOCODE_DATA_DIR``, i.e. ``export PGEOCODE_DATA_DIR=/tmp/pgeocode_data``.
 
+**Data sources**
+
+The data sources are provided as a list in the ``pgeocode.DOWNLOAD_URL`` variable.
+The default value is,
+
+.. code::
+
+    DOWNLOAD_URL = [
+        "https://download.geonames.org/export/zip/{country}.zip",
+        "https://symerio.github.io/postal-codes-data/data/geonames/{country}.txt",
+    ]
+
+Data sources are tried from first to last until one works. Here the second link is a mirror
+of the first.
+
+It is also possible to extend this variable with third party data sources, as
+long as they follow the same format. See for instance
+[postal-codes-data](https://github.com/symerio/postal-codes-data/tree/master/data/geonames)
+repository for examples of data files.
+
+
 License
 -------
 

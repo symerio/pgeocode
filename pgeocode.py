@@ -172,7 +172,6 @@ def _open_extract_cycle_url(urls: List[str], country: str) -> Any:
                 "Trying next URL in DOWNLOAD_URL list.",
                 UserWarning,
             )
-            continue
     else:
         raise ValueError(err_msg)
 
