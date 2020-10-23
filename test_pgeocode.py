@@ -236,3 +236,24 @@ def test_url_returns_404(httpserver, monkeypatch, temp_dir):
     with pytest.raises(urllib.error.HTTPError, match="HTTP Error 404"):
         Nominatim("fr")
     httpserver.check_assertions()
+
+
+def test_first_url_fails(httpserver, monkeypatch, temp_dir):
+    download_url = "/IE.txt"
+    httpserver.expect_oneshot_request(download_url).respond_with_data(
+        "", status=404
+    )
+
+    monkeypatch.setattr(
+        pgeocode,
+        "DOWNLOAD_URL",
+        [
+            httpserver.url_for(download_url),
+            "https://symerio.github.io/postal-codes-data/data/"
+            "geonames/{country}.txt",
+        ],
+    )
+    msg = "IE.txt failed with: HTTP Error 404.*Trying next URL"
+    with pytest.warns(UserWarning, match=msg):
+        Nominatim("ie")
+    httpserver.check_assertions()
