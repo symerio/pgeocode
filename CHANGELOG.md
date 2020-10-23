@@ -1,5 +1,15 @@
 # Release notes
 
+## Version 0.3.0
+
+*October 23, 2020*
+
+ - Add support for a fallback mechanism for data sources
+ - Set the default fallback URL to https://symerio.github.io/postal-codes-data/
+   (only used when the main GeoNames server has availability issues).
+ - Add support for data sources in .txt format (non zipped)
+ - Document how to use custom data sources
+
 ## Version 0.2.1
 
 *February 21, 2019*

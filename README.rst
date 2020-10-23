@@ -105,7 +105,7 @@ for later consumption. It can be changed using the environment variable
 
 **Data sources**
 
-The data sources are provided as a list in the ``pgeocode.DOWNLOAD_URL`` variable.
+Data sources are provided as a list in the ``pgeocode.DOWNLOAD_URL`` variable.
 The default value is,
 
 .. code::
