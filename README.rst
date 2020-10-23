@@ -108,7 +108,7 @@ for later consumption. It can be changed using the environment variable
 Data sources are provided as a list in the ``pgeocode.DOWNLOAD_URL`` variable.
 The default value is,
 
-.. code::
+.. code:: python
 
     DOWNLOAD_URL = [
         "https://download.geonames.org/export/zip/{country}.zip",
@@ -120,7 +120,7 @@ of the first.
 
 It is also possible to extend this variable with third party data sources, as
 long as they follow the same format. See for instance
-[postal-codes-data](https://github.com/symerio/postal-codes-data/tree/master/data/geonames)
+`postal-codes-data <https://github.com/symerio/postal-codes-data/tree/master/data/geonames>`_
 repository for examples of data files.
 
 
