@@ -6,6 +6,7 @@ import os
 import urllib.request
 import warnings
 from io import BytesIO
+from typing import Any, Tuple
 
 import numpy as np
 import pandas as pd
@@ -120,11 +121,10 @@ COUNTRIES_VALID = [
 ]
 
 
-def _get_url(url):
+def _open_url(url: str) -> Tuple[BytesIO, Any]:
     """Download contents for a URL"""
-    res = urllib.request.urlopen(url)
-    reader = BytesIO(res.read())
-    res.close()
+    with urllib.request.urlopen(url) as res:
+        reader = BytesIO(res.read())
     return reader, res.headers
 
 
@@ -140,7 +140,7 @@ class Nominatim:
         into a single entry
     """
 
-    def __init__(self, country="fr", unique=True):
+    def __init__(self, country: str = "fr", unique: bool = True):
 
         country = country.upper()
         if country not in COUNTRIES_VALID:
@@ -166,7 +166,7 @@ class Nominatim:
         self.unique = unique
 
     @staticmethod
-    def _get_data(country):
+    def _get_data(country: str) -> Tuple[str, pd.DataFrame]:
         """Load the data from disk; otherwise download and save it"""
         from zipfile import ZipFile
 
@@ -175,7 +175,7 @@ class Nominatim:
             data = pd.read_csv(data_path, dtype={"postal_code": str})
         else:
             url = DOWNLOAD_URL.format(country=country)
-            reader, headers = _get_url(url)
+            reader, headers = _open_url(url)
             with ZipFile(reader) as fh_zip:
                 with fh_zip.open(country.upper() + ".txt") as fh:
                     data = pd.read_csv(
@@ -191,7 +191,7 @@ class Nominatim:
 
         return data_path, data
 
-    def _index_postal_codes(self):
+    def _index_postal_codes(self) -> pd.DataFrame:
         """ Create a dataframe with unique postal codes """
         data_path_unique = self._data_path.replace(".txt", "-index.txt")
 
@@ -216,7 +216,7 @@ class Nominatim:
             data_unique.to_csv(data_path_unique, index=None)
         return data_unique
 
-    def _normalize_postal_code(self, codes):
+    def _normalize_postal_code(self, codes: pd.DataFrame) -> pd.DataFrame:
         """Normalize postal codes to the values contained in the database
 
         For instance, take into account only first letters when applicable.
@@ -270,7 +270,7 @@ class Nominatim:
 
 
 class GeoDistance(Nominatim):
-    """ Distance calculation from a city name or a postal code
+    """Distance calculation from a city name or a postal code
 
     Parameters
     ----------
@@ -282,11 +282,11 @@ class GeoDistance(Nominatim):
       'nearest' (find from nearest valid points)
     """
 
-    def __init__(self, country="fr", errors="ignore"):
+    def __init__(self, country: str = "fr", errors: str = "ignore"):
         super().__init__(country)
 
     def query_postal_code(self, x, y):
-        """ Get distance (in km) between postal codes
+        """Get distance (in km) between postal codes
 
         Parameters
         ----------
