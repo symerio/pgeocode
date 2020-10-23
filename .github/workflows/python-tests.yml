@@ -38,5 +38,5 @@ jobs:
         pip install flake8
     - name: Test with pytest
       run: |
-        pip install pytest
+        pip install pytest pytest-httpserver
         pytest

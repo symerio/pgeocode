@@ -2,8 +2,10 @@
 #
 # Authors: Roman Yurchak <roman.yurchak@symerio.com>
 import os
-import shutil
-import tempfile
+import urllib
+import json
+from zipfile import ZipFile
+from io import BytesIO
 
 import numpy as np
 import pandas as pd
@@ -12,16 +14,13 @@ from numpy.testing import assert_allclose, assert_array_equal
 
 import pgeocode
 from pgeocode import GeoDistance, Nominatim, haversine_distance
+from pgeocode import _open_extract_url
 
 
 @pytest.fixture
-def temp_dir():
-    path_save = pgeocode.STORAGE_DIR
-    path = tempfile.mkdtemp()
-    pgeocode.STORAGE_DIR = path
-    yield path
-    pgeocode.STORAGE_DIR = path_save
-    shutil.rmtree(path)
+def temp_dir(tmpdir, monkeypatch):
+    monkeypatch.setattr(pgeocode, "STORAGE_DIR", str(tmpdir))
+    yield str(tmpdir)
 
 
 def _normalize_str(x):
@@ -179,3 +178,61 @@ def test_haversine_distance():
     d_pred = haversine_distance(x, y)
     # same distance +/- 3 km
     assert_allclose(d_ref, d_pred, atol=3)
+
+
+def test_open_extract_url(httpserver):
+    download_url = "/fr.txt"
+
+    # check download of uncompressed files
+    httpserver.expect_oneshot_request(download_url).respond_with_json({"a": 1})
+    with _open_extract_url(httpserver.url_for(download_url), "fr") as fh:
+        assert json.loads(fh.read()) == {"a": 1}
+    httpserver.check_assertions()
+
+    # check download of zipped files
+    # Create an in-memory zip file
+    answer = b"a=1"
+    with BytesIO() as fh:
+        with ZipFile(fh, "w") as fh_zip:
+            with fh_zip.open("FR.txt", "w") as fh_inner:
+                fh_inner.write(answer)
+        fh.seek(0)
+        res = fh.read()
+
+    download_url = "/fr.zip"
+    httpserver.expect_oneshot_request(download_url).respond_with_data(res)
+
+    with _open_extract_url(httpserver.url_for(download_url), "fr") as fh:
+        assert fh.read() == answer
+
+
+@pytest.mark.parametrize(
+    "download_url",
+    [
+        "https://download.geonames.org/export/zip/{country}.zip",
+        "https://symerio.github.io/postal-codes-data/data/"
+        "geonames/{country}.txt",
+    ],
+    ids=["geonames", "gitlab-pages"],
+)
+def test_cdn(temp_dir, monkeypatch, download_url):
+    monkeypatch.setattr(pgeocode, "DOWNLOAD_URL", [download_url])
+    assert not os.path.exists(os.path.join(temp_dir, "IE.txt"))
+    Nominatim("IE")
+    # the data file was downloaded
+    assert os.path.exists(os.path.join(temp_dir, "IE.txt"))
+
+
+def test_url_returns_404(httpserver, monkeypatch, temp_dir):
+    download_url = "/fr.gzip"
+    httpserver.expect_oneshot_request(download_url).respond_with_data(
+        "", status=404
+    )
+
+    monkeypatch.setattr(
+        pgeocode, "DOWNLOAD_URL", [httpserver.url_for(download_url)]
+    )
+    # Nominatim("fr")
+    with pytest.raises(urllib.error.HTTPError, match="HTTP Error 404"):
+        Nominatim("fr")
+    httpserver.check_assertions()

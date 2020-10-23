@@ -11,6 +11,10 @@ Unit tests can be run with,
 
 .. code::
 
+    pip install pytest pytest-httpserver
+
+.. code::
+
     pytest
 
 Code style
