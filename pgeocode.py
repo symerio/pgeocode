@@ -2,11 +2,13 @@
 #
 # Authors: Roman Yurchak <roman.yurchak@symerio.com>
 
+import contextlib
 import os
 import urllib.request
 import warnings
 from io import BytesIO
-from typing import Any, Tuple
+from typing import Any, Tuple, List
+from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
@@ -17,7 +19,13 @@ STORAGE_DIR = os.environ.get(
     "PGEOCODE_DATA_DIR", os.path.join(os.path.expanduser("~"), "pgeocode_data")
 )
 
-DOWNLOAD_URL = "https://download.geonames.org/export/zip/{country}.zip"
+# A list of download locations. If the first URL fails, following ones will
+# be used.
+DOWNLOAD_URL = [
+    "https://download.geonames.org/export/zip/{country}.zip",
+    "https://symerio.github.io/postal-codes-data/data/geonames/{country}.txt",
+]
+
 
 DATA_FIELDS = [
     "country_code",
@@ -121,11 +129,51 @@ COUNTRIES_VALID = [
 ]
 
 
-def _open_url(url: str) -> Tuple[BytesIO, Any]:
-    """Download contents for a URL"""
+@contextlib.contextmanager
+def _open_extract_url(url: str, country: str) -> Any:
+    """Download contents for a URL
+
+    If the file has a .zip extension, open it and extract the country
+
+    Returns the opened file object.
+    """
     with urllib.request.urlopen(url) as res:
-        reader = BytesIO(res.read())
-    return reader, res.headers
+        with BytesIO(res.read()) as reader:
+            if url.endswith(".zip"):
+                with ZipFile(reader) as fh_zip:
+                    with fh_zip.open(country.upper() + ".txt") as fh:
+                        yield fh
+            else:
+                yield reader
+
+
+@contextlib.contextmanager
+def _open_extract_cycle_url(urls: List[str], country: str) -> Any:
+    """Same as _open_extract_url but cycle through URLs until one works
+
+    We start by opening the first URL in the list, and if fails
+    move to the next, until one works or the end of list is reached.
+    """
+    if not isinstance(urls, list) or not len(urls):
+        raise ValueError(f"urls={urls} must be a list with at least one URL")
+
+    err_msg = f"Provided download URLs failed {{err}}: {urls}"
+    for idx, val in enumerate(urls):
+        try:
+            with _open_extract_url(val, country) as fh:
+                yield fh
+            # Found a working URL, exit the loop.
+            break
+        except urllib.error.HTTPError as err:  # type: ignore
+            if idx == len(urls) - 1:
+                raise
+            warnings.warn(
+                f"Download from {val} failed with: {err}. "
+                "Trying next URL in DOWNLOAD_URL list.",
+                UserWarning,
+            )
+    else:
+        raise ValueError(err_msg)
 
 
 class Nominatim:
@@ -168,23 +216,22 @@ class Nominatim:
     @staticmethod
     def _get_data(country: str) -> Tuple[str, pd.DataFrame]:
         """Load the data from disk; otherwise download and save it"""
-        from zipfile import ZipFile
 
         data_path = os.path.join(STORAGE_DIR, country.upper() + ".txt")
         if os.path.exists(data_path):
             data = pd.read_csv(data_path, dtype={"postal_code": str})
         else:
-            url = DOWNLOAD_URL.format(country=country)
-            reader, headers = _open_url(url)
-            with ZipFile(reader) as fh_zip:
-                with fh_zip.open(country.upper() + ".txt") as fh:
-                    data = pd.read_csv(
-                        fh,
-                        sep="\t",
-                        header=None,
-                        names=DATA_FIELDS,
-                        dtype={"postal_code": str},
-                    )
+            download_urls = [
+                val.format(country=country) for val in DOWNLOAD_URL
+            ]
+            with _open_extract_cycle_url(download_urls, country) as fh:
+                data = pd.read_csv(
+                    fh,
+                    sep="\t",
+                    header=None,
+                    names=DATA_FIELDS,
+                    dtype={"postal_code": str},
+                )
             if not os.path.exists(STORAGE_DIR):
                 os.mkdir(STORAGE_DIR)
             data.to_csv(data_path, index=None)
