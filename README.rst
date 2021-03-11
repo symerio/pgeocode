@@ -1,10 +1,13 @@
 pgeocode
 ========
 
-|pypi| |rdfd| |GHactions|
+|pypi| |condaforge| |rdfd| |GHactions|
 
 .. |pypi| image:: https://img.shields.io/pypi/v/pgeocode.svg
    :target: https://pypi.org/project/pgeocode/
+
+.. |condaforge| image:: https://img.shields.io/conda/vn/conda-forge/pgeocode.svg
+   :target: https://anaconda.org/conda-forge/pgeocode
 
 .. |rdfd| image:: https://readthedocs.org/projects/pgeocode/badge/?version=latest
     :target: http://pgeocode.readthedocs.io/
@@ -33,6 +36,12 @@ pgeocode requires Python 3.6+ as well as ``numpy`` and ``pandas`` packages. It c
 .. code::
 
     pip install pgeocode
+
+or
+
+.. code::
+
+    conda install -c conda-forge pgeocode
 
 Quickstart
 ----------
