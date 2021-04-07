@@ -20,11 +20,11 @@
 import os
 import sys
 
-import pgeocode
-from typing import Any
-
 sys.path.insert(0, os.path.abspath("../"))
 sys.path.insert(0, os.path.abspath("sphinxext"))
+
+import pgeocode  # noqa
+from typing import Any  # noqa
 
 from github_link import make_linkcode_resolve  # noqa
 
