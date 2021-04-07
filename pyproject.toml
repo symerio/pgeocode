@@ -3,3 +3,29 @@ requires = ["setuptools>=42", "wheel"]
 
 [tool.black]
 line-length = 79
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = true
+envlist = doc,py36,py37,py38,py39,coverage
+skipsdist=true
+
+[testenv]
+whitelist_externals = poetry
+commands =
+    pip install --editable . pytest pytest-httpserver
+    pytest {posargs}
+
+[testenv:doc]
+commands =
+    pip install --editable .
+    pip install --requirement doc/requirements.txt
+    sphinx-build doc build/sphinx/html
+
+[testenv:coverage]
+commands =
+    pip install --editable . pytest pytest-httpserver coverage
+    coverage run -m pytest {posargs}
+    coverage html
+"""
