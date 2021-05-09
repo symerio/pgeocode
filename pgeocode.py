@@ -16,7 +16,8 @@ import pandas as pd
 __version__ = "0.3.0"
 
 STORAGE_DIR = os.environ.get(
-    "PGEOCODE_DATA_DIR", os.path.join(os.path.expanduser("~"), "pgeocode_data")
+    "PGEOCODE_DATA_DIR",
+    os.path.join(os.path.expanduser("~"), ".pgeocode_data"),
 )
 
 # A list of download locations. If the first URL fails, following ones will
