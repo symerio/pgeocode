@@ -233,7 +233,10 @@ class Nominatim:
                     dtype={"postal_code": str},
                 )
             if not os.path.exists(STORAGE_DIR):
-                os.mkdir(STORAGE_DIR)
+                try:
+                    os.mkdir(STORAGE_DIR)
+                except FileExistsError:
+                    pass
             data.to_csv(data_path, index=None)
 
         return data_path, data
