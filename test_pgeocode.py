@@ -1,11 +1,11 @@
 # License 3-clause BSD
 #
 # Authors: Roman Yurchak <roman.yurchak@symerio.com>
+import json
 import os
 import urllib
-import json
-from zipfile import ZipFile
 from io import BytesIO
+from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
@@ -13,7 +13,7 @@ import pytest
 from numpy.testing import assert_allclose, assert_array_equal
 
 import pgeocode
-from pgeocode import GeoDistance, Nominatim, haversine_distance
+from pgeocode import GeoDistance, Nominatim, haversine_distance, NearestNominatim
 from pgeocode import _open_extract_url
 
 
@@ -129,7 +129,6 @@ def test_nominatim_all_countries(country):
 
 
 def test_nominatim_distance_postal_code():
-
     gdist = GeoDistance("fr")
 
     dist = gdist.query_postal_code("91120", "91120")
@@ -178,6 +177,24 @@ def test_haversine_distance():
     d_pred = haversine_distance(x, y)
     # same distance +/- 3 km
     assert_allclose(d_ref, d_pred, atol=3)
+
+
+@pytest.mark.parametrize(
+    "country, postal_code, location, lat, long",
+    [
+        ("it", "00155", "Rome", 41.9028, 12.4964),
+        ("it", "20129", "Milan", 45.4642, 9.1900),
+        ("it", "10149", "Turin", 45.0703, 7.6869),
+        ("it", "90151", "Palermo", 38.1157, 13.3615),
+    ],
+)
+def test_inverse_geocoding(country, postal_code, location, lat, long):
+    n = NearestNominatim(country)
+
+    res = n.inverse_geocoding(lat, long, k=1)
+
+    assert isinstance(res, list)
+    assert postal_code in res
 
 
 def test_open_extract_url(httpserver):
