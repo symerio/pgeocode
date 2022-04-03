@@ -159,8 +159,8 @@ Andorra (AD), Argentina (AR), American Samoa (AS), Austria (AT), Australia (AU),
 See `GeoNames database <http://download.geonames.org/export/zip/>`_ for more information.
 
 
-Tests:
--------------------
+Tests
+-----
 
 .. code::
 
