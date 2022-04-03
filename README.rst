@@ -82,6 +82,16 @@ Quickstart
     >>> dist.query_postal_code(["75013", "75014", "75015"], ["69006", "69005", "69004"])
     array([ 389.15648697,  390.12577967,  390.49857655])
 
+**Nearest Postal Codes:**
+
+.. code:: python
+
+    >>> dist = pgeocode.NearestNominatim('it')
+    >>> dist.inverse_geocoding(lat, long, k=1)
+    [12345]
+    >>>
+    >>> dist.inverse_geocoding(lat, long, k=4)
+    [12345, 12346, 12347, 12348]
 
 
 Geocoding format
@@ -147,3 +157,12 @@ The list of countries available in the GeoNames database, with the corresponding
 Andorra (AD), Argentina (AR), American Samoa (AS), Austria (AT), Australia (AU), Åland Islands (AX), Bangladesh (BD), Belgium (BE), Bulgaria (BG), Bermuda (BM), Brazil (BR), Belarus (BY), Canada (CA), Switzerland (CH), Colombia (CO), Costa Rica (CR), Czechia (CZ), Germany (DE), Denmark (DK), Dominican Republic (DO), Algeria (DZ), Spain (ES), Finland (FI), Faroe Islands (FO), France (FR), United Kingdom of Great Britain and Northern Ireland (GB), French Guiana (GF), Guernsey (GG), Greenland (GL), Guadeloupe (GP), Guatemala (GT), Guam (GU), Croatia (HR), Hungary (HU), Ireland (IE), Isle of Man (IM), India (IN), Iceland (IS), Italy (IT), Jersey (JE), Japan (JP), Liechtenstein (LI), Sri Lanka (LK), Lithuania (LT), Luxembourg (LU), Latvia (LV), Monaco (MC), Republic of Moldova (MD), Marshall Islands (MH), The former Yugoslav Republic of Macedonia (MK), Northern Mariana Islands (MP), Martinique (MQ), Malta (MT), Mexico (MX), Malaysia (MY), New Caledonia (NC), Netherlands (NL), Norway (NO), New Zealand (NZ), Philippines (PH), Pakistan (PK), Poland (PL), Saint Pierre and Miquelon (PM), Puerto Rico (PR), Portugal (PT), Réunion (RE), Romania (RO), Russian Federation (RU), Sweden (SE), Slovenia (SI), Svalbard and Jan Mayen Islands (SJ), Slovakia (SK), San Marino (SM), Thailand (TH), Turkey (TR), Ukraine (UA), United States of America (US), Uruguay (UY), Holy See (VA), United States Virgin Islands (VI), Wallis and Futuna Islands (WF), Mayotte (YT), South Africa (ZA)
 
 See `GeoNames database <http://download.geonames.org/export/zip/>`_ for more information.
+
+
+Tests
+-----
+
+.. code::
+
+    $ pip install pytest pytest-httpserver
+    $ pytest

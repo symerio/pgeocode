@@ -6,12 +6,14 @@ import contextlib
 import os
 import urllib.request
 import warnings
+from collections.abc import Iterable
 from io import BytesIO
 from typing import Any, Tuple, List
 from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
+from scipy.spatial import KDTree
 
 __version__ = "0.3.0"
 
@@ -25,7 +27,6 @@ DOWNLOAD_URL = [
     "https://download.geonames.org/export/zip/{country}.zip",
     "https://symerio.github.io/postal-codes-data/data/geonames/{country}.txt",
 ]
-
 
 DATA_FIELDS = [
     "country_code",
@@ -315,6 +316,34 @@ class Nominatim:
         pass
 
 
+class NearestNominatim(Nominatim):
+    """
+    Finds closest postal code for given coordinates.
+    Parameters
+    ----------
+    data_path: str
+      path to the dataset
+    error: str, default='ignore'
+      how to handle not found elements. One of
+      'ignore' (return NaNs), 'error' (raise an exception),
+      'nearest' (find from nearest valid points)
+    """
+
+    def __init__(self, country: str = "fr", errors: str = "ignore"):
+        super().__init__(country)
+        self.tree = KDTree(data=self._data[['latitude', 'longitude']])
+
+    def inverse_geocoding(self, lat, long, k=1):
+        """
+         Finds closest postal code for given coordinates. for given coordinates.
+        """
+        idx = self.tree.query(x=(lat, long), k=k)[1]
+        if not isinstance(idx, Iterable):
+            idx = [idx]
+        locations = self._data[self._data.index.isin(idx)]
+        return locations.postal_code.to_list()
+
+
 class GeoDistance(Nominatim):
     """Distance calculation from a city name or a postal code
 
@@ -425,8 +454,8 @@ def haversine_distance(x, y):
     y_lat = y_rad[:, 0]
 
     a = (
-        np.sin(dlat / 2.0) ** 2
-        + np.cos(x_lat) * np.cos(y_lat) * np.sin(dlon / 2.0) ** 2
+            np.sin(dlat / 2.0) ** 2
+            + np.cos(x_lat) * np.cos(y_lat) * np.sin(dlon / 2.0) ** 2
     )
 
     c = 2 * np.arcsin(np.sqrt(a))

@@ -48,7 +48,7 @@ setup(
     author_email="roman.yurchak@symerio.com",
     py_modules=["pgeocode"],
     python_requires=">=3.6",
-    install_requires=["requests", "numpy", "pandas"],
+    install_requires=["requests", "numpy", "pandas", "scipy"],
     classifiers=[_f for _f in CLASSIFIERS.split("\n") if _f],
     license="BSD",
 )
