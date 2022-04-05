@@ -72,6 +72,25 @@ Quickstart
     0       75013   Paris 13         Île-de-France   48.8322     2.3561
     1       69006    Lyon 06  Auvergne-Rhône-Alpes   45.7679     4.8506
 
+**Place name queries**
+
+.. code:: python
+
+    >>> import pgeocode
+
+    >>> nomi = pgeocode.Nominatim('fr')
+    >>> nomi.query_location("Antibes", top_k=3)
+        country_code  postal_code place_name                  state_name  state_code  ... community_name community_code latitude longitude  accuracy
+    49553           FR        06160    Antibes  Provence-Alpes-Côte d'Azur        93.0  ...         Grasse            061  43.5858    7.1083         5
+    49787           FR        06600    Antibes  Provence-Alpes-Côte d'Azur        93.0  ...         Grasse            061  43.5858    7.1083         5
+    49788           FR  06601 CEDEX    Antibes  Provence-Alpes-Côte d'Azur        93.0  ...         Grasse            061  43.5858    7.1083         5
+
+    >>> nomi.query_location("Straassborg", top_k=3, fuzzy_threshold=80)
+        country_code  postal_code  place_name state_name  state_code  ... community_name community_code latitude longitude  accuracy
+    25461           FR        67000  Strasbourg  Grand Est        44.0  ...     Strasbourg            678  48.5839    7.7455         5
+    25462           FR  67001 CEDEX  Strasbourg  Grand Est        44.0  ...     Strasbourg            678  48.5839    7.7455         5
+    25463           FR  67002 CEDEX  Strasbourg  Grand Est        44.0  ...     Strasbourg            678  48.5839    7.7455         5
+
 **Distance calculations**
 
 .. code:: python
@@ -81,7 +100,6 @@ Quickstart
     389.156
     >>> dist.query_postal_code(["75013", "75014", "75015"], ["69006", "69005", "69004"])
     array([ 389.15648697,  390.12577967,  390.49857655])
-
 
 
 Geocoding format
