@@ -31,7 +31,7 @@ jobs:
         then
            pip install --extra-index-url https://antocuni.github.io/pypy-wheels/manylinux2010 numpy pandas
         fi
-
+        pip install thefuzz[speedup]
         pip install -e .
     - name: Lint with flake8
       run: |
