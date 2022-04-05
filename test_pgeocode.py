@@ -257,3 +257,24 @@ def test_first_url_fails(httpserver, monkeypatch, temp_dir):
     with pytest.warns(UserWarning, match=msg):
         Nominatim("ie")
     httpserver.check_assertions()
+
+
+def test_query_location_exact():
+    nomi = Nominatim("fr")
+    res = nomi.query_location("Strasbourg")
+    assert isinstance(res, pd.DataFrame)
+
+
+def test_query_location_fuzzy():
+    nomi = Nominatim("fr")
+    res = nomi.query_location("Straasborg", fuzzy_threshold=80)
+    print(res)
+    assert isinstance(res, pd.DataFrame)
+    assert 0 < len(res)
+
+
+def test_query_location_nonsense():
+    nomi = Nominatim("fr")
+    res = nomi.query_location("182581stisdgsg21191t..,,,,,,,,,,")
+    assert isinstance(res, pd.DataFrame)
+    assert len(res) == 0

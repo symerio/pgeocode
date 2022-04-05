@@ -49,6 +49,9 @@ setup(
     py_modules=["pgeocode"],
     python_requires=">=3.6",
     install_requires=["requests", "numpy", "pandas"],
+    extras_require={
+        "fuzzy": ["thefuzz"],
+    },
     classifiers=[_f for _f in CLASSIFIERS.split("\n") if _f],
     license="BSD",
 )
