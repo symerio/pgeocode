@@ -1,5 +1,12 @@
 # Release notes
 
+## [unreleased]
+ 
+ *April 5, 2022*
+
+ - Implemented `Nominatim.query_location` to query place names with text search
+ - Added optional extra dependency `thefuzz`
+
 ## Version 0.3.0
 
 *October 23, 2020*
