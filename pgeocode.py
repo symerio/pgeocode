@@ -310,8 +310,13 @@ class Nominatim:
             response = response.iloc[0]
         return response
 
-    def query_location(self, name: str, top_k: int = 100, fuzzy_threshold: Optional[int] = None,
-                       col: str = "place_name") -> pd.DataFrame:
+    def query_location(
+        self,
+        name: str,
+        top_k: int = 100,
+        fuzzy_threshold: Optional[int] = None,
+        col: str = "place_name",
+    ) -> pd.DataFrame:
         """Get location information from a place name
 
         Parameters
@@ -338,7 +343,9 @@ class Nominatim:
             return contains_matches.iloc[:top_k]
 
         if fuzzy_threshold is not None:
-            fuzzy_matches = self._fuzzy_search(name, col, threshold=fuzzy_threshold)
+            fuzzy_matches = self._fuzzy_search(
+                name, col, threshold=fuzzy_threshold
+            )
             if len(fuzzy_matches) > 0:
                 return fuzzy_matches.iloc[:top_k]
 
@@ -348,7 +355,9 @@ class Nominatim:
         match_mask = self._data[col].str.lower().str.contains(text.lower())
         return self._data[match_mask]
 
-    def _fuzzy_search(self, text: str, col: str, threshold: float = 80) -> pd.DataFrame:
+    def _fuzzy_search(
+        self, text: str, col: str, threshold: float = 80
+    ) -> pd.DataFrame:
         try:
             # thefuzz is not required to install pgeocode,
             # it is an optional dependency for enabling fuzzy search
@@ -359,7 +368,9 @@ class Nominatim:
                 "It can be installed with: pip install thefuzz[speedup]"
             ) from err
 
-        fuzzy_scores = self._data[col].apply(lambda x: fuzz.ratio(str(x), text))
+        fuzzy_scores = self._data[col].apply(
+            lambda x: fuzz.ratio(str(x), text)
+        )
         return self._data[fuzzy_scores >= threshold]
 
 
