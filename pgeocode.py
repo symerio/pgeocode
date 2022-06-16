@@ -251,7 +251,7 @@ class Nominatim:
             df_unique_cp_group = self._data.groupby("postal_code")
             data_unique = df_unique_cp_group[["latitude", "longitude"]].mean()
             valid_keys = set(DATA_FIELDS).difference(
-                ["place_name", "lattitude", "longitude", "postal_code"]
+                ["place_name", "latitude", "longitude", "postal_code"]
             )
             data_unique["place_name"] = df_unique_cp_group["place_name"].apply(
                 lambda x: ", ".join([str(el) for el in x])
