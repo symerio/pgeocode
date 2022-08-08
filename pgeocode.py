@@ -13,7 +13,7 @@ from zipfile import ZipFile
 import numpy as np
 import pandas as pd
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 STORAGE_DIR = os.environ.get(
     "PGEOCODE_DATA_DIR", os.path.join(os.path.expanduser("~"), "pgeocode_data")
@@ -21,10 +21,11 @@ STORAGE_DIR = os.environ.get(
 
 # A list of download locations. If the first URL fails, following ones will
 # be used.
-DOWNLOAD_URL = [
+DEFAULT_DOWNLOAD_URL = [
     "https://download.geonames.org/export/zip/{country}.zip",
     "https://symerio.github.io/postal-codes-data/data/geonames/{country}.txt",
 ]
+DOWNLOAD_URL = os.environ.get('PGEOCODE_DOWNLOAD_URL') or DEFAULT_DOWNLOAD_URL
 
 
 DATA_FIELDS = [
