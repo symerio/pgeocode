@@ -25,7 +25,7 @@ DEFAULT_DOWNLOAD_URL = [
     "https://download.geonames.org/export/zip/{country}.zip",
     "https://symerio.github.io/postal-codes-data/data/geonames/{country}.txt",
 ]
-DOWNLOAD_URL = os.environ.get('PGEOCODE_DOWNLOAD_URL') or DEFAULT_DOWNLOAD_URL
+DOWNLOAD_URL = os.environ.get("PGEOCODE_DOWNLOAD_URL") or DEFAULT_DOWNLOAD_URL
 
 
 DATA_FIELDS = [
