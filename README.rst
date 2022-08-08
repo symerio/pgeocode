@@ -127,6 +127,9 @@ The default value is,
 Data sources are tried from first to last until one works. Here the second link is a mirror
 of the first.
 
+It can be changed using the environment variable
+``PGEOCODE_DOWNLOAD_URL``, i.e. ``export PGEOCODE_DOWNLOAD_URL=file:///opt/pgeocode_files/{country}.txt``.
+
 It is also possible to extend this variable with third party data sources, as
 long as they follow the same format. See for instance
 `postal-codes-data <https://github.com/symerio/postal-codes-data/tree/master/data/geonames>`_
