@@ -17,7 +17,7 @@ __version__ = "0.3.0"
 
 STORAGE_DIR = os.environ.get(
     "PGEOCODE_DATA_DIR",
-    os.path.join(os.path.expanduser("~"), ".cache", 'pgeocode' ),
+    os.path.join(os.path.expanduser("~"), ".cache", "pgeocode"),
 )
 
 # A list of download locations. If the first URL fails, following ones will
