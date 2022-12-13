@@ -31,7 +31,7 @@ For additional documentation see `pgeocode.readthedocs.io <https://pgeocode.read
 Installation
 ------------
 
-pgeocode requires Python 3.6+ as well as ``numpy`` and ``pandas`` packages. It can be installed with,
+pgeocode requires Python 3.8+ as well as ``numpy`` and ``pandas`` packages. It can be installed with,
 
 .. code::
 
@@ -126,7 +126,7 @@ Configuration and defaults
 
 **Storage directory**
 
-Defaults to ``~/pgeocode_data``, it is the directory where data is downloaded
+Defaults to ``~/.cache/pgeocode``, it is the directory where data is downloaded
 for later consumption. It can be changed using the environment variable
 ``PGEOCODE_DATA_DIR``, i.e. ``export PGEOCODE_DATA_DIR=/tmp/pgeocode_data``.
 

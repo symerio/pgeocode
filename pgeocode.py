@@ -16,7 +16,8 @@ import pandas as pd
 __version__ = "0.3.0"
 
 STORAGE_DIR = os.environ.get(
-    "PGEOCODE_DATA_DIR", os.path.join(os.path.expanduser("~"), "pgeocode_data")
+    "PGEOCODE_DATA_DIR",
+    os.path.join(os.path.expanduser("~"), ".cache", "pgeocode"),
 )
 
 # A list of download locations. If the first URL fails, following ones will
@@ -251,7 +252,7 @@ class Nominatim:
             df_unique_cp_group = self._data.groupby("postal_code")
             data_unique = df_unique_cp_group[["latitude", "longitude"]].mean()
             valid_keys = set(DATA_FIELDS).difference(
-                ["place_name", "lattitude", "longitude", "postal_code"]
+                ["place_name", "latitude", "longitude", "postal_code"]
             )
             data_unique["place_name"] = df_unique_cp_group["place_name"].apply(
                 lambda x: ", ".join([str(el) for el in x])
@@ -322,7 +323,7 @@ class Nominatim:
         Parameters
         ----------
         name: str
-          string containing place names to search for
+          string containing place names to search for. The search is case insensitive.
         top_k: int
           maximum number of results (rows in DataFrame) to return
         fuzzy_threshold: Optional[int]
