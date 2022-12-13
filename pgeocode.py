@@ -7,7 +7,7 @@ import os
 import urllib.request
 import warnings
 from io import BytesIO
-from typing import Any, Tuple, List
+from typing import Any, List, Tuple
 from zipfile import ZipFile
 
 import numpy as np
@@ -16,7 +16,8 @@ import pandas as pd
 __version__ = "0.3.0"
 
 STORAGE_DIR = os.environ.get(
-    "PGEOCODE_DATA_DIR", os.path.join(os.path.expanduser("~"), "pgeocode_data")
+    "PGEOCODE_DATA_DIR",
+    os.path.join(os.path.expanduser("~"), ".cache", "pgeocode"),
 )
 
 # A list of download locations. If the first URL fails, following ones will

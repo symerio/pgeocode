@@ -1,5 +1,14 @@
 # Release notes
 
+## Unreleased
+
+ - The minimum supported Python version is updated to Python 3.8
+   [#65](https://github.com/symerio/pgeocode/pull/65)
+ - The default folder to store downloaded data is changed to `~/.cache/pgeocode/`.
+   This default can still be changed by setting the `PGEOCODE_DATA_DIR` environment variable.
+   [#51](https://github.com/symerio/pgeocode/pull/51)
+
+
 ## Version 0.3.0
 
 *October 23, 2020*
