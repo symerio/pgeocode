@@ -16,6 +16,7 @@ repos:
     rev: v3.3.1
     hooks:
     -   id: pyupgrade
+        args: ["--py38-plus"]
 
 -   repo: https://github.com/hadialqattan/pycln
     rev: "v2.1.2"
@@ -30,3 +31,6 @@ repos:
     hooks:
      -  id: mypy
         files: ".+.py"
+
+ci:
+  autoupdate_schedule: "quarterly"
