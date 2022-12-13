@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # pgeocode documentation build configuration file, created by
 # sphinx-quickstart on Sun Feb  4 15:22:38 2018.
@@ -23,11 +22,11 @@ import sys
 sys.path.insert(0, os.path.abspath("../"))
 sys.path.insert(0, os.path.abspath("sphinxext"))
 
-import pgeocode  # noqa
 from typing import Any  # noqa
 
 from github_link import make_linkcode_resolve  # noqa
 
+import pgeocode  # noqa
 
 # -- General configuration ------------------------------------------------
 
@@ -184,7 +183,7 @@ texinfo_documents = [
 # The following is used by sphinx.ext.linkcode to provide links to github
 linkcode_resolve = make_linkcode_resolve(
     "pgeocode",
-    u"https://github.com/symerio/"
+    "https://github.com/symerio/"
     "pgeocode/blob/{revision}/"
     "{package}/{path}#L{lineno}",
 )

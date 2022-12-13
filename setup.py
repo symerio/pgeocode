@@ -7,7 +7,7 @@ from setuptools import setup
 
 # https://packaging.python.org/guides/single-sourcing-package-version/
 def read(*names, **kwargs):
-    with io.open(
+    with open(
         os.path.join(os.path.dirname(__file__), *names),
         encoding=kwargs.get("encoding", "utf8"),
     ) as fp:
@@ -29,10 +29,6 @@ Intended Audience :: Developers
 License :: OSI Approved :: BSD License
 Programming Language :: Python
 Programming Language :: Python :: 3
-Programming Language :: Python :: 3.6
-Programming Language :: Python :: 3.7
-Programming Language :: Python :: 3.8
-Programming Language :: Python :: 3.9
 Topic :: Software Development
 Operating System :: POSIX
 Operating System :: Unix
@@ -47,7 +43,7 @@ setup(
     author="Roman Yurchak",
     author_email="roman.yurchak@symerio.com",
     py_modules=["pgeocode"],
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     install_requires=["requests", "numpy", "pandas"],
     classifiers=[_f for _f in CLASSIFIERS.split("\n") if _f],
     license="BSD",

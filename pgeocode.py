@@ -7,7 +7,7 @@ import os
 import urllib.request
 import warnings
 from io import BytesIO
-from typing import Any, Tuple, List
+from typing import Any, List, Tuple
 from zipfile import ZipFile
 
 import numpy as np
@@ -239,7 +239,7 @@ class Nominatim:
         return data_path, data
 
     def _index_postal_codes(self) -> pd.DataFrame:
-        """ Create a dataframe with unique postal codes """
+        """Create a dataframe with unique postal codes"""
         data_path_unique = self._data_path.replace(".txt", "-index.txt")
 
         if os.path.exists(data_path_unique):
