@@ -17,7 +17,7 @@ __version__ = "0.3.0"
 
 STORAGE_DIR = os.environ.get(
     "PGEOCODE_DATA_DIR",
-    os.path.join(os.path.expanduser("~"), ".pgeocode_data"),
+    os.path.join(os.path.expanduser("~"), ".cache", 'pgeocode' ),
 )
 
 # A list of download locations. If the first URL fails, following ones will
@@ -233,8 +233,7 @@ class Nominatim:
                     names=DATA_FIELDS,
                     dtype={"postal_code": str},
                 )
-            if not os.path.exists(STORAGE_DIR):
-                os.mkdir(STORAGE_DIR)
+            os.makedirs(STORAGE_DIR, exist_ok=True)
             data.to_csv(data_path, index=None)
 
         return data_path, data
