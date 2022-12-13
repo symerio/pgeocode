@@ -108,7 +108,7 @@ Configuration and defaults
 
 **Storage directory**
 
-Defaults to ``~/pgeocode_data``, it is the directory where data is downloaded
+Defaults to ``~/.cache/pgeocode``, it is the directory where data is downloaded
 for later consumption. It can be changed using the environment variable
 ``PGEOCODE_DATA_DIR``, i.e. ``export PGEOCODE_DATA_DIR=/tmp/pgeocode_data``.
 
