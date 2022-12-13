@@ -273,6 +273,11 @@ def test_query_location_exact():
     assert isinstance(res, pd.DataFrame)
     assert len(res) == 0
 
+    # Query on a different field name
+    res = nomi.query_location("île", col="state_name")
+    assert isinstance(res, pd.DataFrame)
+    assert res["state_name"].unique().tolist() == ["Île-de-France"]
+
 
 def test_query_location_fuzzy():
     pytest.importorskip("thefuzz")

@@ -369,6 +369,7 @@ class Nominatim:
 
     def _str_contains_search(self, text: str, col: str) -> pd.DataFrame:
         match_mask = self._data[col].str.lower().str.contains(text.lower())
+        match_mask.fillna(False, inplace=True)
         return self._data[match_mask]
 
     def _fuzzy_search(
