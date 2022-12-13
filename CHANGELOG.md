@@ -8,7 +8,7 @@
    With this fix `Nominatim(.., unique=True)` correctly computes the average
    latitude for each postcode (if multiple localities share the same postcode),
    instead of taking the first latitude value.
-   [#65](https://github.com/symerio/pgeocode/pull/65)
+   [#62](https://github.com/symerio/pgeocode/pull/62)
 
  - The default folder to store downloaded data is changed to `~/.cache/pgeocode/`.
    This default can still be changed by setting the `PGEOCODE_DATA_DIR` environment variable.
