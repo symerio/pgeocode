@@ -327,9 +327,11 @@ class Nominatim:
         top_k: int
           maximum number of results (rows in DataFrame) to return
         fuzzy_threshold: Optional[int]
-          threshold (lower bound) for fuzzy string search for finding the place name, default None (=no fuzzy search)
-          pass an integer value between 70 and 100 to enable fuzzy search (the lower the value, the more results)
-          requires 'thefuzz' package to be installed: pip install thefuzz[speedup]
+          threshold (lower bound) for fuzzy string search for finding the place
+          name, default None (=no fuzzy search) pass an integer value between
+          70 and 100 to enable fuzzy search (the lower the value, the more
+          results) requires 'thefuzz' package to be installed: pip install
+          thefuzz[speedup]
           (for more info: https://github.com/seatgeek/thefuzz)
         col: str
           which column in the internal data to search through
@@ -337,7 +339,8 @@ class Nominatim:
         Returns
         -------
         df : pandas.DataFrame
-          a pandas.DataFrame with the relevant information for all matching place names (or empty if no match was found)
+          a DataFrame with the relevant information for all matching place
+          names (or empty if no match was found)
         """
         contains_matches = self._str_contains_search(name, col)
         if len(contains_matches) > 0:
