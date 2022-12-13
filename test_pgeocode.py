@@ -1,11 +1,11 @@
 # License 3-clause BSD
 #
 # Authors: Roman Yurchak <roman.yurchak@symerio.com>
+import json
 import os
 import urllib
-import json
-from zipfile import ZipFile
 from io import BytesIO
+from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
@@ -13,8 +13,12 @@ import pytest
 from numpy.testing import assert_allclose, assert_array_equal
 
 import pgeocode
-from pgeocode import GeoDistance, Nominatim, haversine_distance
-from pgeocode import _open_extract_url
+from pgeocode import (
+    GeoDistance,
+    Nominatim,
+    _open_extract_url,
+    haversine_distance,
+)
 
 
 @pytest.fixture
