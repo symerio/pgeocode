@@ -7,7 +7,7 @@ import os
 import urllib.request
 import warnings
 from io import BytesIO
-from typing import Any, Tuple, List
+from typing import Any, List, Tuple
 from zipfile import ZipFile
 
 import numpy as np

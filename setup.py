@@ -7,7 +7,7 @@ from setuptools import setup
 
 # https://packaging.python.org/guides/single-sourcing-package-version/
 def read(*names, **kwargs):
-    with io.open(
+    with open(
         os.path.join(os.path.dirname(__file__), *names),
         encoding=kwargs.get("encoding", "utf8"),
     ) as fp:
