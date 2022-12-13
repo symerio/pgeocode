@@ -261,3 +261,56 @@ def test_first_url_fails(httpserver, monkeypatch, temp_dir):
     with pytest.warns(UserWarning, match=msg):
         Nominatim("ie")
     httpserver.check_assertions()
+
+
+def test_unique_index_pcode(tmp_path):
+    """Check that a centroid is computed both for latitude and longitude
+
+    Regression test for https://github.com/symerio/pgeocode/pull/62
+    """
+    class MockNominatim(Nominatim):
+        def __init__(self):
+            pass
+
+    data = pd.DataFrame({
+        'postal_code': ['1', '1', '2', '2'],
+        'latitude': [1., 2., 3., 4],
+        'longitude': [5., 6., 7., 8],
+        'place_name': ['a', 'b', 'c', 'd'],
+        'state_name': ['a', 'b', 'c', 'd'],
+        'country_name': ['a', 'b', 'c', 'd'],
+        'county_name': ['a', 'b', 'c', 'd'],
+        'community_name': ['a', 'b', 'c', 'd'],
+        'accuracy': [1, 2, 3, 4],
+        'country_code': [1, 2, 3, 4],
+        'county_code': [1, 2, 3, 4],
+        'state_code': [1, 2, 3, 4],
+        'community_code': [1, 2, 3, 4],
+    })
+
+
+
+    nominatim = MockNominatim()
+    data_path = tmp_path / 'a.txt'
+    nominatim._data_path = str(data_path)
+    nominatim._data = data
+    data_unique = nominatim._index_postal_codes()
+
+    data_unique_expected = pd.DataFrame({
+        'postal_code': ['1', '2'],
+        'latitude': [1.5, 3.5],
+        'longitude': [5.5, 7.5],
+        'place_name': ['a, b', 'c, d'],
+        'state_name': ['a', 'c'],
+        # We don't include the country_name for some reason?
+        # 'country_name': ['a', 'c'],
+        'county_name': ['a', 'c'],
+        'community_name': ['a',  'c'],
+        'accuracy': [1, 3],
+        'country_code': [1, 3],
+        'county_code': [1, 3],
+        'state_code': [1, 3],
+        'community_code': [1, 3],
+    })
+    pd.testing.assert_frame_equal(data_unique.sort_index(axis=1),
+            data_unique_expected.sort_index(axis=1))

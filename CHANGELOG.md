@@ -4,6 +4,12 @@
 
  - The minimum supported Python version is updated to Python 3.8
    [#65](https://github.com/symerio/pgeocode/pull/65)
+ - Fix error in latitude grouping when creating a unique postcode index.
+   With this fix `Nominatim(.., unique=True)` correctly computes the average
+   latitude for each postcode (if multiple localities share the same postcode),
+   instead of taking the first latitude value.
+   [#65](https://github.com/symerio/pgeocode/pull/65)
+
  - The default folder to store downloaded data is changed to `~/.cache/pgeocode/`.
    This default can still be changed by setting the `PGEOCODE_DATA_DIR` environment variable.
    [#51](https://github.com/symerio/pgeocode/pull/51)
