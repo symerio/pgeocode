@@ -18,7 +18,7 @@
    Fuzzy search is supported if an optional extra dependency `thefuzz` is installed.
    [#59](https://github.com/symerio/pgeocode/pull/59)
  - Add more countries that are now supported by GeoNames including: AZ (Azerbaijan), CL (Chile), CY (Cyprus), EE (Estonia), FM (Federated States of Micronesia), HT (Haiti), KR (Republic of Korea), MW (Malawi), PE (Peru), PW (Palau), RS (Serbia), SG (Singapore)
-
+   [#66](https://github.com/symerio/pgeocode/pull/66)
 
 
 ## Version 0.3.0
