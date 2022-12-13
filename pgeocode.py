@@ -13,7 +13,7 @@ from zipfile import ZipFile
 import numpy as np
 import pandas as pd
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 STORAGE_DIR = os.environ.get(
     "PGEOCODE_DATA_DIR",

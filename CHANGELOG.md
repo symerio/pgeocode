@@ -1,6 +1,9 @@
 # Release notes
 
-## Unreleased
+## Version 0.4.0
+
+*December 13, 2020*
+
 
  - The minimum supported Python version is updated to Python 3.8
    [#65](https://github.com/symerio/pgeocode/pull/65)
