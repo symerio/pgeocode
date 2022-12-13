@@ -14,6 +14,11 @@
    This default can still be changed by setting the `PGEOCODE_DATA_DIR` environment variable.
    [#51](https://github.com/symerio/pgeocode/pull/51)
 
+ - Implemented `Nominatim.query_location` to query place names with text search
+   Fuzzy search is supported if an optional extra dependency `thefuzz` is installed.
+   [#59](https://github.com/symerio/pgeocode/pull/59)
+
+
 
 ## Version 0.3.0
 

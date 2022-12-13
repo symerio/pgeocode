@@ -263,6 +263,27 @@ def test_first_url_fails(httpserver, monkeypatch, temp_dir):
     httpserver.check_assertions()
 
 
+def test_query_location_exact():
+    nomi = Nominatim("fr")
+    res = nomi.query_location("Strasbourg")
+    assert isinstance(res, pd.DataFrame)
+
+    # Invalid query
+    res = nomi.query_location("182581stisdgsg21191t..,,,,,,,,,,")
+    assert isinstance(res, pd.DataFrame)
+    assert len(res) == 0
+
+
+def test_query_location_fuzzy():
+    pytest.importorskip("thefuzz")
+    nomi = Nominatim("fr")
+    # Querying with a typo
+    res = nomi.query_location("Straasborg", fuzzy_threshold=80)
+    assert isinstance(res, pd.DataFrame)
+    assert len(res) > 0
+    assert res["place_name"].unique().tolist() == ["Strasbourg"]
+
+
 def test_unique_index_pcode(tmp_path):
     """Check that a centroid is computed both for latitude and longitude
 

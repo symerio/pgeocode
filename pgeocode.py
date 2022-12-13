@@ -7,7 +7,7 @@ import os
 import urllib.request
 import warnings
 from io import BytesIO
-from typing import Any, List, Tuple
+from typing import Any, Tuple, List, Optional
 from zipfile import ZipFile
 
 import numpy as np
@@ -311,9 +311,71 @@ class Nominatim:
             response = response.iloc[0]
         return response
 
-    def query_location(self, name):
-        """Get locations information from a community/minicipality name"""
-        pass
+    def query_location(
+        self,
+        name: str,
+        top_k: int = 100,
+        fuzzy_threshold: Optional[int] = None,
+        col: str = "place_name",
+    ) -> pd.DataFrame:
+        """Get location information from a place name
+
+        Parameters
+        ----------
+        name: str
+          string containing place names to search for. The search is case insensitive.
+        top_k: int
+          maximum number of results (rows in DataFrame) to return
+        fuzzy_threshold: Optional[int]
+          threshold (lower bound) for fuzzy string search for finding the place
+          name, default None (=no fuzzy search) pass an integer value between
+          70 and 100 to enable fuzzy search (the lower the value, the more
+          results) requires 'thefuzz' package to be installed: pip install
+          thefuzz[speedup]
+          (for more info: https://github.com/seatgeek/thefuzz)
+        col: str
+          which column in the internal data to search through
+
+        Returns
+        -------
+        df : pandas.DataFrame
+          a DataFrame with the relevant information for all matching place
+          names (or empty if no match was found)
+        """
+        contains_matches = self._str_contains_search(name, col)
+        if len(contains_matches) > 0:
+            return contains_matches.iloc[:top_k]
+
+        if fuzzy_threshold is not None:
+            fuzzy_matches = self._fuzzy_search(
+                name, col, threshold=fuzzy_threshold
+            )
+            if len(fuzzy_matches) > 0:
+                return fuzzy_matches.iloc[:top_k]
+
+        return pd.DataFrame(columns=self._data.columns)
+
+    def _str_contains_search(self, text: str, col: str) -> pd.DataFrame:
+        match_mask = self._data[col].str.lower().str.contains(text.lower())
+        return self._data[match_mask]
+
+    def _fuzzy_search(
+        self, text: str, col: str, threshold: float = 80
+    ) -> pd.DataFrame:
+        try:
+            # thefuzz is not required to install pgeocode,
+            # it is an optional dependency for enabling fuzzy search
+            from thefuzz import fuzz
+        except ModuleNotFoundError as err:
+            raise ModuleNotFoundError(
+                "Cannot use fuzzy search without 'thefuzz' package. "
+                "It can be installed with: pip install thefuzz[speedup]"
+            ) from err
+
+        fuzzy_scores = self._data[col].apply(
+            lambda x: fuzz.ratio(str(x), text)
+        )
+        return self._data[fuzzy_scores >= threshold]
 
 
 class GeoDistance(Nominatim):
