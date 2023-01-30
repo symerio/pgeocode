@@ -1,5 +1,29 @@
 # Release notes
 
+## Version 0.4.0
+
+*December 13, 2022*
+
+
+ - The minimum supported Python version is updated to Python 3.8
+   [#65](https://github.com/symerio/pgeocode/pull/65)
+ - Fix error in latitude grouping when creating a unique postcode index.
+   With this fix `Nominatim(.., unique=True)` correctly computes the average
+   latitude for each postcode (if multiple localities share the same postcode),
+   instead of taking the first latitude value.
+   [#62](https://github.com/symerio/pgeocode/pull/62)
+
+ - The default folder to store downloaded data is changed to `~/.cache/pgeocode/`.
+   This default can still be changed by setting the `PGEOCODE_DATA_DIR` environment variable.
+   [#51](https://github.com/symerio/pgeocode/pull/51)
+
+ - Implemented `Nominatim.query_location` to query place names with text search
+   Fuzzy search is supported if an optional extra dependency `thefuzz` is installed.
+   [#59](https://github.com/symerio/pgeocode/pull/59)
+ - Add more countries that are now supported by GeoNames including: AZ (Azerbaijan), CL (Chile), CY (Cyprus), EE (Estonia), FM (Federated States of Micronesia), HT (Haiti), KR (Republic of Korea), MW (Malawi), PE (Peru), PW (Palau), RS (Serbia), SG (Singapore)
+   [#66](https://github.com/symerio/pgeocode/pull/66)
+
+
 ## Version 0.3.0
 
 *October 23, 2020*

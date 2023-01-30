@@ -1,11 +1,11 @@
 # License 3-clause BSD
 #
 # Authors: Roman Yurchak <roman.yurchak@symerio.com>
+import json
 import os
 import urllib
-import json
-from zipfile import ZipFile
 from io import BytesIO
+from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
@@ -13,8 +13,12 @@ import pytest
 from numpy.testing import assert_allclose, assert_array_equal
 
 import pgeocode
-from pgeocode import GeoDistance, Nominatim, haversine_distance
-from pgeocode import _open_extract_url
+from pgeocode import (
+    GeoDistance,
+    Nominatim,
+    _open_extract_url,
+    haversine_distance,
+)
 
 
 @pytest.fixture
@@ -257,3 +261,86 @@ def test_first_url_fails(httpserver, monkeypatch, temp_dir):
     with pytest.warns(UserWarning, match=msg):
         Nominatim("ie")
     httpserver.check_assertions()
+
+
+def test_query_location_exact():
+    nomi = Nominatim("fr")
+    res = nomi.query_location("Strasbourg")
+    assert isinstance(res, pd.DataFrame)
+
+    # Invalid query
+    res = nomi.query_location("182581stisdgsg21191t..,,,,,,,,,,")
+    assert isinstance(res, pd.DataFrame)
+    assert len(res) == 0
+
+    # Query on a different field name
+    res = nomi.query_location("île", col="state_name")
+    assert isinstance(res, pd.DataFrame)
+    assert res["state_name"].unique().tolist() == ["Île-de-France"]
+
+
+def test_query_location_fuzzy():
+    pytest.importorskip("thefuzz")
+    nomi = Nominatim("fr")
+    # Querying with a typo
+    res = nomi.query_location("Straasborg", fuzzy_threshold=80)
+    assert isinstance(res, pd.DataFrame)
+    assert len(res) > 0
+    assert res["place_name"].unique().tolist() == ["Strasbourg"]
+
+
+def test_unique_index_pcode(tmp_path):
+    """Check that a centroid is computed both for latitude and longitude
+
+    Regression test for https://github.com/symerio/pgeocode/pull/62
+    """
+
+    class MockNominatim(Nominatim):
+        def __init__(self):
+            pass
+
+    data = pd.DataFrame(
+        {
+            "postal_code": ["1", "1", "2", "2"],
+            "latitude": [1.0, 2.0, 3.0, 4],
+            "longitude": [5.0, 6.0, 7.0, 8],
+            "place_name": ["a", "b", "c", "d"],
+            "state_name": ["a", "b", "c", "d"],
+            "country_name": ["a", "b", "c", "d"],
+            "county_name": ["a", "b", "c", "d"],
+            "community_name": ["a", "b", "c", "d"],
+            "accuracy": [1, 2, 3, 4],
+            "country_code": [1, 2, 3, 4],
+            "county_code": [1, 2, 3, 4],
+            "state_code": [1, 2, 3, 4],
+            "community_code": [1, 2, 3, 4],
+        }
+    )
+
+    nominatim = MockNominatim()
+    data_path = tmp_path / "a.txt"
+    nominatim._data_path = str(data_path)
+    nominatim._data = data
+    data_unique = nominatim._index_postal_codes()
+
+    data_unique_expected = pd.DataFrame(
+        {
+            "postal_code": ["1", "2"],
+            "latitude": [1.5, 3.5],
+            "longitude": [5.5, 7.5],
+            "place_name": ["a, b", "c, d"],
+            "state_name": ["a", "c"],
+            # We don't include the country_name for some reason?
+            # 'country_name': ['a', 'c'],
+            "county_name": ["a", "c"],
+            "community_name": ["a", "c"],
+            "accuracy": [1, 3],
+            "country_code": [1, 3],
+            "county_code": [1, 3],
+            "state_code": [1, 3],
+            "community_code": [1, 3],
+        }
+    )
+    pd.testing.assert_frame_equal(
+        data_unique.sort_index(axis=1), data_unique_expected.sort_index(axis=1)
+    )

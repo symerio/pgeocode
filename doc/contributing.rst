@@ -17,6 +17,8 @@ Unit tests can be run with,
 
     pytest
 
+You can also run ``tox`` to run the unit test will all the supported python versions.
+
 Code style
 ----------
 

@@ -10,6 +10,8 @@ repos:
     hooks:
       - id: ruff
         args: [--fix]
+
+
 -   repo: https://github.com/psf/black
     rev: 22.12.0
     hooks:
@@ -18,6 +20,7 @@ repos:
     rev: v0.991
     hooks:
      -  id: mypy
-        args:
-          - --ignore-missing-imports
         files: ".+.py"
+
+ci:
+  autoupdate_schedule: "quarterly"

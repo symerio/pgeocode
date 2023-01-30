@@ -1,10 +1,13 @@
 pgeocode
 ========
 
-|pypi| |rdfd| |GHactions|
+|pypi| |condaforge| |rdfd| |GHactions|
 
 .. |pypi| image:: https://img.shields.io/pypi/v/pgeocode.svg
    :target: https://pypi.org/project/pgeocode/
+
+.. |condaforge| image:: https://img.shields.io/conda/vn/conda-forge/pgeocode.svg
+   :target: https://anaconda.org/conda-forge/pgeocode
 
 .. |rdfd| image:: https://readthedocs.org/projects/pgeocode/badge/?version=latest
     :target: http://pgeocode.readthedocs.io/
@@ -28,11 +31,17 @@ For additional documentation see `pgeocode.readthedocs.io <https://pgeocode.read
 Installation
 ------------
 
-pgeocode requires Python 3.6+ as well as ``numpy`` and ``pandas`` packages. It can be installed with,
+pgeocode requires Python 3.8+ as well as ``numpy`` and ``pandas`` packages. It can be installed with,
 
 .. code::
 
     pip install pgeocode
+
+or
+
+.. code::
+
+    conda install -c conda-forge pgeocode
 
 Quickstart
 ----------
@@ -63,6 +72,25 @@ Quickstart
     0       75013   Paris 13         Île-de-France   48.8322     2.3561
     1       69006    Lyon 06  Auvergne-Rhône-Alpes   45.7679     4.8506
 
+**Place name queries**
+
+.. code:: python
+
+    >>> import pgeocode
+
+    >>> nomi = pgeocode.Nominatim('fr')
+    >>> nomi.query_location("Antibes", top_k=3)
+        country_code  postal_code place_name                  state_name  state_code  ... community_name community_code latitude longitude  accuracy
+    49553           FR        06160    Antibes  Provence-Alpes-Côte d'Azur        93.0  ...         Grasse            061  43.5858    7.1083         5
+    49787           FR        06600    Antibes  Provence-Alpes-Côte d'Azur        93.0  ...         Grasse            061  43.5858    7.1083         5
+    49788           FR  06601 CEDEX    Antibes  Provence-Alpes-Côte d'Azur        93.0  ...         Grasse            061  43.5858    7.1083         5
+
+    >>> nomi.query_location("Straassborg", top_k=3, fuzzy_threshold=80)
+        country_code  postal_code  place_name state_name  state_code  ... community_name community_code latitude longitude  accuracy
+    25461           FR        67000  Strasbourg  Grand Est        44.0  ...     Strasbourg            678  48.5839    7.7455         5
+    25462           FR  67001 CEDEX  Strasbourg  Grand Est        44.0  ...     Strasbourg            678  48.5839    7.7455         5
+    25463           FR  67002 CEDEX  Strasbourg  Grand Est        44.0  ...     Strasbourg            678  48.5839    7.7455         5
+
 **Distance calculations**
 
 .. code:: python
@@ -72,7 +100,6 @@ Quickstart
     389.156
     >>> dist.query_postal_code(["75013", "75014", "75015"], ["69006", "69005", "69004"])
     array([ 389.15648697,  390.12577967,  390.49857655])
-
 
 
 Geocoding format
@@ -99,7 +126,7 @@ Configuration and defaults
 
 **Storage directory**
 
-Defaults to ``~/pgeocode_data``, it is the directory where data is downloaded
+Defaults to ``~/.cache/pgeocode``, it is the directory where data is downloaded
 for later consumption. It can be changed using the environment variable
 ``PGEOCODE_DATA_DIR``, i.e. ``export PGEOCODE_DATA_DIR=/tmp/pgeocode_data``.
 
@@ -135,6 +162,6 @@ Supported countries
 
 The list of countries available in the GeoNames database, with the corresponding country codes, are given below,
 
-Andorra (AD), Argentina (AR), American Samoa (AS), Austria (AT), Australia (AU), Åland Islands (AX), Bangladesh (BD), Belgium (BE), Bulgaria (BG), Bermuda (BM), Brazil (BR), Belarus (BY), Canada (CA), Switzerland (CH), Colombia (CO), Costa Rica (CR), Czechia (CZ), Germany (DE), Denmark (DK), Dominican Republic (DO), Algeria (DZ), Spain (ES), Finland (FI), Faroe Islands (FO), France (FR), United Kingdom of Great Britain and Northern Ireland (GB), French Guiana (GF), Guernsey (GG), Greenland (GL), Guadeloupe (GP), Guatemala (GT), Guam (GU), Croatia (HR), Hungary (HU), Ireland (IE), Isle of Man (IM), India (IN), Iceland (IS), Italy (IT), Jersey (JE), Japan (JP), Liechtenstein (LI), Sri Lanka (LK), Lithuania (LT), Luxembourg (LU), Latvia (LV), Monaco (MC), Republic of Moldova (MD), Marshall Islands (MH), The former Yugoslav Republic of Macedonia (MK), Northern Mariana Islands (MP), Martinique (MQ), Malta (MT), Mexico (MX), Malaysia (MY), New Caledonia (NC), Netherlands (NL), Norway (NO), New Zealand (NZ), Philippines (PH), Pakistan (PK), Poland (PL), Saint Pierre and Miquelon (PM), Puerto Rico (PR), Portugal (PT), Réunion (RE), Romania (RO), Russian Federation (RU), Sweden (SE), Slovenia (SI), Svalbard and Jan Mayen Islands (SJ), Slovakia (SK), San Marino (SM), Thailand (TH), Turkey (TR), Ukraine (UA), United States of America (US), Uruguay (UY), Holy See (VA), United States Virgin Islands (VI), Wallis and Futuna Islands (WF), Mayotte (YT), South Africa (ZA)
+Andorra (AD), Argentina (AR), American Samoa (AS), Austria (AT), Australia (AU), Åland Islands (AX), Azerbaijan (AZ), Bangladesh (BD), Belgium (BE), Bulgaria (BG), Bermuda (BM), Brazil (BR), Belarus (BY), Canada (CA), Switzerland (CH), Chile (CL), Colombia (CO), Costa Rica (CR), Cyprus (CY), Czechia (CZ), Germany (DE), Denmark (DK), Dominican Republic (DO), Algeria (DZ), Estonia (EE), Spain (ES), Finland (FI), Federated States of Micronesia (FM), Faroe Islands (FO), France (FR), United Kingdom of Great Britain and Northern Ireland (GB), French Guiana (GF), Guernsey (GG), Greenland (GL), Guadeloupe (GP), Guatemala (GT), Guam (GU), Croatia (HR), Haiti (HT), Hungary (HU), Ireland (IE), Isle of Man (IM), India (IN), Iceland (IS), Italy (IT), Jersey (JE), Japan (JP), Republic of Korea (KR), Liechtenstein (LI), Sri Lanka (LK), Lithuania (LT), Luxembourg (LU), Latvia (LV), Monaco (MC), Republic of Moldova (MD), Marshall Islands (MH), The former Yugoslav Republic of Macedonia (MK), Northern Mariana Islands (MP), Martinique (MQ), Malta (MT), Malawi (MW), Mexico (MX), Malaysia (MY), New Caledonia (NC), Netherlands (NL), Norway (NO), New Zealand (NZ), Peru (PE), Philippines (PH), Pakistan (PK), Poland (PL), Saint Pierre and Miquelon (PM), Puerto Rico (PR), Portugal (PT), Palau (PW), Réunion (RE), Romania (RO), Serbia (RS), Russian Federation (RU), Sweden (SE), Singapore (SG), Slovenia (SI), Svalbard and Jan Mayen Islands (SJ), Slovakia (SK), San Marino (SM), Thailand (TH), Turkey (TR), Ukraine (UA), United States of America (US), Uruguay (UY), Holy See (VA), United States Virgin Islands (VI), Wallis and Futuna Islands (WF), Mayotte (YT), South Africa (ZA)
 
 See `GeoNames database <http://download.geonames.org/export/zip/>`_ for more information.
