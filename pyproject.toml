@@ -4,6 +4,8 @@ requires = ["setuptools>=42", "wheel"]
 [tool.black]
 line-length = 79
 
+[tool.ruff]
+
 [tool.mypy]
 python_version = "3.8"
 show_error_codes = true
@@ -15,11 +17,6 @@ disallow_untyped_defs = false
 disallow_incomplete_defs = true
 no_implicit_optional = true
 
-[tool.pycln]
-all = true
-
-[tool.isort]
-profile = "black"
 
 [tool.tox]
 legacy_tox_ini = """
