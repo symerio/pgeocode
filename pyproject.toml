@@ -3,3 +3,5 @@ requires = ["setuptools>=42", "wheel"]
 
 [tool.black]
 line-length = 79
+
+[tool.ruff]
