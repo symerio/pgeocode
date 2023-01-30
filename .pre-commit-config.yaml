@@ -1,21 +1,21 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v4.4.0
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
+-   repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: "v0.0.237"
+    hooks:
+      - id: ruff
+        args: [--fix]
 -   repo: https://github.com/psf/black
-    rev: 20.8b1
+    rev: 22.12.0
     hooks:
     -   id: black
--   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.7.7
-    hooks:
-    -   id: flake8
-        types: [file, python]
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.790
+    rev: v0.991
     hooks:
      -  id: mypy
         args:
