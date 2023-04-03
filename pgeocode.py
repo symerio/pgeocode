@@ -202,7 +202,6 @@ class Nominatim:
     """
 
     def __init__(self, country: str = "fr", unique: bool = True):
-
         country = country.upper()
         if country not in COUNTRIES_VALID:
             raise ValueError(
@@ -259,7 +258,6 @@ class Nominatim:
                 data_path_unique, dtype={"postal_code": str}
             )
         else:
-
             # group together places with the same postal code
             df_unique_cp_group = self._data.groupby("postal_code")
             data_unique = df_unique_cp_group[["latitude", "longitude"]].mean()
