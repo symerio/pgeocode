@@ -133,7 +133,6 @@ def test_nominatim_all_countries(country):
 
 
 def test_nominatim_distance_postal_code():
-
     gdist = GeoDistance("fr")
 
     dist = gdist.query_postal_code("91120", "91120")
