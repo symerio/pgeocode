@@ -278,6 +278,14 @@ def test_query_location_exact():
     assert res["state_name"].unique().tolist() == ["Île-de-France"]
 
 
+def test_location_naples():
+    # https://github.com/symerio/pgeocode/issues/73
+    nomi = Nominatim("it")
+    res = nomi.query_location("Napoli")
+    assert res["county_name"].unique().tolist() == ["Napoli"]
+    assert res["county_code"].unique().tolist() == ["NA"]
+
+
 def test_query_location_fuzzy():
     pytest.importorskip("thefuzz")
     nomi = Nominatim("fr")
