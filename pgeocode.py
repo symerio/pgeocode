@@ -58,6 +58,7 @@ COUNTRIES_VALID = [
     "BR",
     "BY",
     "CA",
+    "CA_full.csv",
     "CH",
     "CL",
     "CO",
@@ -75,6 +76,7 @@ COUNTRIES_VALID = [
     "FO",
     "FR",
     "GB",
+    "GB_full.csv",
     "GF",
     "GG",
     "GL",
@@ -109,6 +111,7 @@ COUNTRIES_VALID = [
     "MY",
     "NC",
     "NL",
+    "NL_full.csv",
     "NO",
     "NZ",
     "PE",
@@ -171,11 +174,16 @@ def _open_extract_url(url: str, country: str) -> Any:
 
     Returns the opened file object.
     """
+    if 'full' not in country.lower():
+        country = country.upper()
+    else:
+        country = country[:country.find('.')]
+
     with urllib.request.urlopen(url) as res:
         with BytesIO(res.read()) as reader:
             if url.endswith(".zip"):
                 with ZipFile(reader) as fh_zip:
-                    with fh_zip.open(country.upper() + ".txt") as fh:
+                    with fh_zip.open(country + ".txt") as fh:
                         yield fh
             else:
                 yield reader
@@ -223,7 +231,12 @@ class Nominatim:
     """
 
     def __init__(self, country: str = "fr", unique: bool = True):
-        country = country.upper()
+        if 'full' in country.lower():
+            country = country[:country.find('_')].upper() + \
+                        country[country.find('_'):].lower() + str(".csv")
+        else:
+            country = country.upper()
+
         if country not in COUNTRIES_VALID:
             raise ValueError(
                 (
