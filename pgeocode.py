@@ -174,10 +174,10 @@ def _open_extract_url(url: str, country: str) -> Any:
 
     Returns the opened file object.
     """
-    if 'full' not in country.lower():
+    if "full" not in country.lower():
         country = country.upper()
     else:
-        country = country[:country.find('.')]
+        country = country[: country.find(".")]
 
     with urllib.request.urlopen(url) as res:
         with BytesIO(res.read()) as reader:
@@ -231,9 +231,12 @@ class Nominatim:
     """
 
     def __init__(self, country: str = "fr", unique: bool = True):
-        if 'full' in country.lower():
-            country = country[:country.find('_')].upper() + \
-                        country[country.find('_'):].lower() + str(".csv")
+        if "full" in country.lower():
+            country = (
+                country[: country.find("_")].upper()
+                + country[country.find("_") :].lower()
+                + ".csv"
+            )
         else:
             country = country.upper()
 
