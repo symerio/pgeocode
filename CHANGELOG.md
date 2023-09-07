@@ -1,5 +1,12 @@
 # Release notes
 
+## Version 0.4.1
+
+*September 7, 2022*
+
+ - NA county_code is valid, not Nan
+   [#74](https://github.com/symerio/pgeocode/pull/74)
+
 ## Version 0.4.0
 
 *December 13, 2022*
