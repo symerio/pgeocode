@@ -1,6 +1,4 @@
----
-title: pgeocode
----
+# pgeocode
 
 [![pypi](https://img.shields.io/pypi/v/pgeocode.svg)](https://pypi.org/project/pgeocode/)
 [![condaforge](https://img.shields.io/conda/vn/conda-forge/pgeocode.svg)](https://anaconda.org/conda-forge/pgeocode)
