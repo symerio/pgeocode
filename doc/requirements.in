@@ -1,0 +1,8 @@
+requests
+scikit-learn>=0.18
+sphinx
+pillow
+recommonmark
+sphinx_rtd_theme
+sphinxcontrib-napoleon
+../
