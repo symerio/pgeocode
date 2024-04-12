@@ -7,7 +7,7 @@ import os
 import urllib.request
 import warnings
 from io import BytesIO
-from typing import Any, Tuple, List, Optional
+from typing import Any, List, Optional, Tuple
 from zipfile import ZipFile
 
 import numpy as np
@@ -226,11 +226,9 @@ class Nominatim:
         country = country.upper()
         if country not in COUNTRIES_VALID:
             raise ValueError(
-                (
-                    "country={} is not a known country code. "
-                    "See the README for a list of supported "
-                    "countries"
-                ).format(country)
+                f"country={country} is not a known country code. "
+                "See the README for a list of supported "
+                "countries"
             )
         if country == "AR":
             warnings.warn(
@@ -259,9 +257,7 @@ class Nominatim:
                 keep_default_na=False,
             )
         else:
-            download_urls = [
-                val.format(country=country) for val in DOWNLOAD_URL
-            ]
+            download_urls = [val.format(country=country) for val in DOWNLOAD_URL]
             with _open_extract_cycle_url(download_urls, country) as fh:
                 data = pd.read_csv(
                     fh,
@@ -344,9 +340,7 @@ class Nominatim:
             codes = pd.DataFrame(codes, columns=["postal_code"])
 
         codes = self._normalize_postal_code(codes)
-        response = pd.merge(
-            codes, self._data_frame, on="postal_code", how="left"
-        )
+        response = pd.merge(codes, self._data_frame, on="postal_code", how="left")
         if self.unique and single_entry:
             response = response.iloc[0]
         return response
@@ -387,9 +381,7 @@ class Nominatim:
             return contains_matches.iloc[:top_k]
 
         if fuzzy_threshold is not None:
-            fuzzy_matches = self._fuzzy_search(
-                name, col, threshold=fuzzy_threshold
-            )
+            fuzzy_matches = self._fuzzy_search(name, col, threshold=fuzzy_threshold)
             if len(fuzzy_matches) > 0:
                 return fuzzy_matches.iloc[:top_k]
 
@@ -400,9 +392,7 @@ class Nominatim:
         match_mask.fillna(False, inplace=True)
         return self._data[match_mask]
 
-    def _fuzzy_search(
-        self, text: str, col: str, threshold: float = 80
-    ) -> pd.DataFrame:
+    def _fuzzy_search(self, text: str, col: str, threshold: float = 80) -> pd.DataFrame:
         try:
             # thefuzz is not required to install pgeocode,
             # it is an optional dependency for enabling fuzzy search
@@ -413,9 +403,7 @@ class Nominatim:
                 "It can be installed with: pip install thefuzz[speedup]"
             ) from err
 
-        fuzzy_scores = self._data[col].apply(
-            lambda x: fuzz.ratio(str(x), text)
-        )
+        fuzzy_scores = self._data[col].apply(lambda x: fuzz.ratio(str(x), text))
         return self._data[fuzzy_scores >= threshold]
 
 
