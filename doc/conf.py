@@ -45,6 +45,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinxcontrib.napoleon",
     "sphinx.ext.linkcode",
+    "myst_parser",
 ]
 
 
@@ -58,15 +59,14 @@ templates_path = ["_templates"]
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = ".rst"
+source_suffix = [".rst", ".md"]
 
 # The master toctree document.
 master_doc = "index"
 
 # General information about the project.
 project = "pgeocode"
-copyright = "2018, Symerio"
+copyright = "2023, Symerio"
 author = "Roman Yurchak"
 
 # The version info for the project you're documenting, acts as replacement for

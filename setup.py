@@ -34,13 +34,14 @@ Operating System :: Unix
 
 setup(
     name="pgeocode",
-    description="Approximate geocoding",
-    long_description=open("README.rst").read(),
+    description="Postal code geocoding",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     version=find_version("pgeocode.py"),
     author="Roman Yurchak",
     author_email="roman.yurchak@symerio.com",
     py_modules=["pgeocode"],
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     install_requires=["requests", "numpy", "pandas"],
     extras_require={
         "fuzzy": ["thefuzz"],

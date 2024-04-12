@@ -7,7 +7,7 @@ import os
 import urllib.request
 import warnings
 from io import BytesIO
-from typing import Any, List, Optional, Tuple
+from typing import Any
 from zipfile import ZipFile
 
 import numpy as np
@@ -182,7 +182,7 @@ def _open_extract_url(url: str, country: str) -> Any:
 
 
 @contextlib.contextmanager
-def _open_extract_cycle_url(urls: List[str], country: str) -> Any:
+def _open_extract_cycle_url(urls: list[str], country: str) -> Any:
     """Same as _open_extract_url but cycle through URLs until one works
 
     We start by opening the first URL in the list, and if fails
@@ -245,7 +245,7 @@ class Nominatim:
         self.unique = unique
 
     @staticmethod
-    def _get_data(country: str) -> Tuple[str, pd.DataFrame]:
+    def _get_data(country: str) -> tuple[str, pd.DataFrame]:
         """Load the data from disk; otherwise download and save it"""
 
         data_path = os.path.join(STORAGE_DIR, country.upper() + ".txt")
@@ -349,7 +349,7 @@ class Nominatim:
         self,
         name: str,
         top_k: int = 100,
-        fuzzy_threshold: Optional[int] = None,
+        fuzzy_threshold: int | None = None,
         col: str = "place_name",
     ) -> pd.DataFrame:
         """Get location information from a place name
