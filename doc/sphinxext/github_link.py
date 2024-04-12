@@ -42,7 +42,7 @@ def _linkcode_resolve(domain, info, package, url_fmt, revision):
         return
 
     class_name = info["fullname"].split(".")[0]
-    if type(class_name) != str:
+    if isinstance(class_name, str):
         # Python 2 only
         class_name = class_name.encode("utf-8")
     module = __import__(info["module"], fromlist=[class_name])
@@ -60,16 +60,12 @@ def _linkcode_resolve(domain, info, package, url_fmt, revision):
     if not fn:
         return
 
-    fn = os.path.relpath(
-        fn, start=os.path.dirname(__import__(package).__file__)
-    )
+    fn = os.path.relpath(fn, start=os.path.dirname(__import__(package).__file__))
     try:
         lineno = inspect.getsourcelines(obj)[1]
     except Exception:
         lineno = ""
-    return url_fmt.format(
-        revision=revision, package=package, path=fn, lineno=lineno
-    )
+    return url_fmt.format(revision=revision, package=package, path=fn, lineno=lineno)
 
 
 def make_linkcode_resolve(package, url_fmt):

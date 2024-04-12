@@ -213,8 +213,7 @@ def test_open_extract_url(httpserver):
     "download_url",
     [
         "https://download.geonames.org/export/zip/{country}.zip",
-        "https://symerio.github.io/postal-codes-data/data/"
-        "geonames/{country}.txt",
+        "https://symerio.github.io/postal-codes-data/data/" "geonames/{country}.txt",
     ],
     ids=["geonames", "gitlab-pages"],
 )
@@ -228,13 +227,9 @@ def test_cdn(temp_dir, monkeypatch, download_url):
 
 def test_url_returns_404(httpserver, monkeypatch, temp_dir):
     download_url = "/fr.gzip"
-    httpserver.expect_oneshot_request(download_url).respond_with_data(
-        "", status=404
-    )
+    httpserver.expect_oneshot_request(download_url).respond_with_data("", status=404)
 
-    monkeypatch.setattr(
-        pgeocode, "DOWNLOAD_URL", [httpserver.url_for(download_url)]
-    )
+    monkeypatch.setattr(pgeocode, "DOWNLOAD_URL", [httpserver.url_for(download_url)])
     # Nominatim("fr")
     with pytest.raises(urllib.error.HTTPError, match="HTTP Error 404"):
         Nominatim("fr")
@@ -243,9 +238,7 @@ def test_url_returns_404(httpserver, monkeypatch, temp_dir):
 
 def test_first_url_fails(httpserver, monkeypatch, temp_dir):
     download_url = "/IE.txt"
-    httpserver.expect_oneshot_request(download_url).respond_with_data(
-        "", status=404
-    )
+    httpserver.expect_oneshot_request(download_url).respond_with_data("", status=404)
 
     monkeypatch.setattr(
         pgeocode,
