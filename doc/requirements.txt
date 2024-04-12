@@ -52,7 +52,7 @@ packaging==24.0
     # via sphinx
 pandas==2.2.2
     # via pgeocode
-pgeocode @ file:///home/rth/src/pgeocode
+./
     # via -r doc/requirements.in
 pillow==10.3.0
     # via -r doc/requirements.in
