@@ -165,7 +165,7 @@ def test_haversine_distance():
     try:
         from geopy.distance import great_circle
     except ImportError:
-        raise pytest.skip("scikit-learn not installed")
+        raise pytest.skip("scikit-learn not installed") from None
 
     rng = np.random.RandomState(42)
 

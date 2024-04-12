@@ -7,7 +7,7 @@ import os
 import urllib.request
 import warnings
 from io import BytesIO
-from typing import Any, Tuple, List, Optional
+from typing import Any, List, Optional, Tuple
 from zipfile import ZipFile
 
 import numpy as np
@@ -226,11 +226,9 @@ class Nominatim:
         country = country.upper()
         if country not in COUNTRIES_VALID:
             raise ValueError(
-                (
-                    "country={} is not a known country code. "
-                    "See the README for a list of supported "
-                    "countries"
-                ).format(country)
+                f"country={country} is not a known country code. "
+                "See the README for a list of supported "
+                "countries"
             )
         if country == "AR":
             warnings.warn(
