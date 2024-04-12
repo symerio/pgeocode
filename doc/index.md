@@ -8,4 +8,5 @@
 
    contributing
    api
+   changelog
 ```
