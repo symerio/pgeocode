@@ -1,7 +1,6 @@
 # pgeocode
 
 [![pypi](https://img.shields.io/pypi/v/pgeocode.svg)](https://pypi.org/project/pgeocode/)
-[![condaforge](https://img.shields.io/conda/vn/conda-forge/pgeocode.svg)](https://anaconda.org/conda-forge/pgeocode)
 [![rdfd](https://readthedocs.org/projects/pgeocode/badge/?version=latest)](http://pgeocode.readthedocs.io/)
 [![GHactions](https://github.com/symerio/pgeocode/workflows/Test/badge.svg)](https://github.com/symerio/pgeocode/actions?query=branch%3Amaster+)
 
