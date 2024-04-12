@@ -133,7 +133,6 @@ def test_nominatim_all_countries(country):
 
 
 def test_nominatim_distance_postal_code():
-
     gdist = GeoDistance("fr")
 
     dist = gdist.query_postal_code("91120", "91120")
@@ -277,6 +276,14 @@ def test_query_location_exact():
     res = nomi.query_location("île", col="state_name")
     assert isinstance(res, pd.DataFrame)
     assert res["state_name"].unique().tolist() == ["Île-de-France"]
+
+
+def test_location_naples():
+    # https://github.com/symerio/pgeocode/issues/73
+    nomi = Nominatim("it")
+    res = nomi.query_location("Napoli")
+    assert res["county_name"].unique().tolist() == ["Napoli"]
+    assert res["county_code"].unique().tolist() == ["NA"]
 
 
 def test_query_location_fuzzy():

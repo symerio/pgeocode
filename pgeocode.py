@@ -13,7 +13,7 @@ from zipfile import ZipFile
 import numpy as np
 import pandas as pd
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 STORAGE_DIR = os.environ.get(
     "PGEOCODE_DATA_DIR",
@@ -141,6 +141,27 @@ COUNTRIES_VALID = [
     "ZA",
 ]
 
+NA_VALUES = [
+    "",
+    "#N/A",
+    "#N/A N/A",
+    "#NA",
+    "-1.#IND",
+    "-1.#QNAN",
+    "-NaN",
+    "-nan",
+    "1.#IND",
+    "1.#QNAN",
+    "<NA>",
+    "N/A",
+    # "NA", # NA is a valid county code for Naples, Italy
+    "NULL",
+    "NaN",
+    "n/a",
+    "nan",
+    "null",
+]
+
 
 @contextlib.contextmanager
 def _open_extract_url(url: str, country: str) -> Any:
@@ -202,7 +223,6 @@ class Nominatim:
     """
 
     def __init__(self, country: str = "fr", unique: bool = True):
-
         country = country.upper()
         if country not in COUNTRIES_VALID:
             raise ValueError(
@@ -232,7 +252,12 @@ class Nominatim:
 
         data_path = os.path.join(STORAGE_DIR, country.upper() + ".txt")
         if os.path.exists(data_path):
-            data = pd.read_csv(data_path, dtype={"postal_code": str})
+            data = pd.read_csv(
+                data_path,
+                dtype={"postal_code": str},
+                na_values=NA_VALUES,
+                keep_default_na=False,
+            )
         else:
             download_urls = [
                 val.format(country=country) for val in DOWNLOAD_URL
@@ -244,10 +269,11 @@ class Nominatim:
                     header=None,
                     names=DATA_FIELDS,
                     dtype={"postal_code": str},
+                    na_values=NA_VALUES,
+                    keep_default_na=False,
                 )
             os.makedirs(STORAGE_DIR, exist_ok=True)
             data.to_csv(data_path, index=None)
-
         return data_path, data
 
     def _index_postal_codes(self) -> pd.DataFrame:
@@ -256,10 +282,12 @@ class Nominatim:
 
         if os.path.exists(data_path_unique):
             data_unique = pd.read_csv(
-                data_path_unique, dtype={"postal_code": str}
+                data_path_unique,
+                dtype={"postal_code": str},
+                na_values=NA_VALUES,
+                keep_default_na=False,
             )
         else:
-
             # group together places with the same postal code
             df_unique_cp_group = self._data.groupby("postal_code")
             data_unique = df_unique_cp_group[["latitude", "longitude"]].mean()
