@@ -21,18 +21,13 @@ For additional documentation see
 
 # Installation
 
-pgeocode requires Python 3.8+ as well as `numpy` and `pandas` packages.
+pgeocode requires Python 3.10+ as well as `numpy` and `pandas` packages.
 It can be installed with,
 
 ```
 pip install pgeocode
 ```
 
-or
-
-```
-conda install -c conda-forge pgeocode
-```
 
 # Quickstart
 
@@ -142,6 +137,8 @@ repository for examples of data files.
 
 The pgeocode package is distributed under the 3-clause BSD license.
 
+The pgeocode package is maintained by [Symerio](https://www.symerio.com).
+
 # Supported countries
 
 The list of countries available in the GeoNames database, with the
@@ -173,4 +170,4 @@ Uruguay (UY), Holy See (VA), United States Virgin Islands (VI), Wallis
 and Futuna Islands (WF), Mayotte (YT), South Africa (ZA)
 
 See [GeoNames database](http://download.geonames.org/export/zip/) for
-more information.  The pgeocode package is maintained by [Symerio](https://www.symerio.com).
+more information.

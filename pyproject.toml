@@ -2,7 +2,7 @@
 requires = ["setuptools>=42", "wheel"]
 
 [tool.ruff]
-target-version = "py38"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = [
@@ -20,7 +20,7 @@ select = [
 ignore = ["E402", "E501", "E731", "E741"]
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.10"
 show_error_codes = true
 warn_unreachable = true
 

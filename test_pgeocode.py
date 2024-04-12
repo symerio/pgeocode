@@ -175,7 +175,7 @@ def test_haversine_distance():
     y = x * rng.rand(N, 2)
 
     d_ref = np.zeros(N)
-    for idx, (x_coord, y_coord) in enumerate(zip(x, y)):
+    for idx, (x_coord, y_coord) in enumerate(zip(x, y, strict=False)):
         d_ref[idx] = great_circle(x_coord, y_coord).km
 
     d_pred = haversine_distance(x, y)
