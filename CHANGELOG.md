@@ -1,6 +1,6 @@
 # Release notes
 ## Version 0.5.0
-*April 12, 2024*
+*April 13, 2024*
 
  - Change to minimum supported Python version to 3.10. Run unit test with pandas 2.0.
    [#74](https://github.com/symerio/pgeocode/pull/74)
