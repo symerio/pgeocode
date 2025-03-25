@@ -20,7 +20,7 @@ For additional documentation see
 
 # Installation
 
-pgeocode requires Python 3.10+ as well as `numpy` and `pandas` packages.
+pgeocode requires Python 3.10+ and the pandas 1.5.0+ package.
 It can be installed with,
 
 ```
