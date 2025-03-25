@@ -15,16 +15,16 @@ jobs:
         include:
           - python-version: "3.10"
             optional-deps: true
-            pandas-version: "==1.5.3"
+            dependencies: "pandas==1.5.3 numpy==1.24.4"
           - python-version: "3.11"
             optional-deps: false
-            pandas-version: "==2.0.3"
+            dependencies: "pandas==2.0.3"
           - python-version: "3.12"
             optional-deps: true
-            pandas-version: "==2.1.0"
+            dependencies: "pandas==2.1.0"
           - python-version: "3.13"
             optional-deps: false
-            pandas-version: ">2.2.0"
+            dependencies: "pandas>2.2.0"
 
     steps:
     - uses: actions/checkout@v3
@@ -34,7 +34,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        uv pip install pandas${{ matrix.pandas-version }}
+        uv pip install ${{ matrix.dependencies }}
         if [ "${{ matrix.optional-deps }}" = "true" ]; then
           uv pip install thefuzz[speedup]
         fi
