@@ -12,8 +12,19 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
-        optional-deps: [false, true]
+        include:
+          - python-version: "3.10"
+            optional-deps: true
+            pandas-version: "==1.5.3"
+          - python-version: "3.11"
+            optional-deps: false
+            pandas-version: "==2.0.3"
+          - python-version: "3.12"
+            optional-deps: true
+            pandas-version: "==2.1.0"
+          - python-version: "3.13"
+            optional-deps: false
+            pandas-version: ">2.2.0"
 
     steps:
     - uses: actions/checkout@v3
@@ -27,6 +38,7 @@ jobs:
           uv pip install thefuzz[speedup]
         fi
         uv pip install -e .
+        uv pip install pandas${{ matrix.pandas-version }}
     - name: Test with pytest
       run: |
         uv pip install pytest pytest-httpserver
