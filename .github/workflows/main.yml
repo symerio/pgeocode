@@ -19,9 +19,9 @@ jobs:
           - python-version: "3.11"
             optional-deps: false
             dependencies: "pandas==2.0.3 numpy==1.24.4"
-          - python-version: "3.12"
+          - python-version: "3.11"
             optional-deps: true
-            dependencies: "pandas==2.1.0 numpy==1.26.4"
+            dependencies: "pandas==2.1.4 numpy==1.26.4"
           - python-version: "3.13"
             optional-deps: false
             dependencies: "pandas>2.2.0"
