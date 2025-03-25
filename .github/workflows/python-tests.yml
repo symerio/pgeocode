@@ -29,5 +29,5 @@ jobs:
         uv pip install -e .
     - name: Test with pytest
       run: |
-        pip install pytest pytest-httpserver
+        uv install pytest pytest-httpserver
         pytest
