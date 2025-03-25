@@ -213,7 +213,7 @@ def test_open_extract_url(httpserver):
     "download_url",
     [
         "https://download.geonames.org/export/zip/{country}.zip",
-        "https://symerio.github.io/postal-codes-data/data/" "geonames/{country}.txt",
+        "https://symerio.github.io/postal-codes-data/data/geonames/{country}.txt",
     ],
     ids=["geonames", "gitlab-pages"],
 )
@@ -245,8 +245,7 @@ def test_first_url_fails(httpserver, monkeypatch, temp_dir):
         "DOWNLOAD_URL",
         [
             httpserver.url_for(download_url),
-            "https://symerio.github.io/postal-codes-data/data/"
-            "geonames/{country}.txt",
+            "https://symerio.github.io/postal-codes-data/data/geonames/{country}.txt",
         ],
     )
     msg = "IE.txt failed with: HTTP Error 404.*Trying next URL"

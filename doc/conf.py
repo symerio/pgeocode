@@ -183,7 +183,5 @@ texinfo_documents = [
 # The following is used by sphinx.ext.linkcode to provide links to github
 linkcode_resolve = make_linkcode_resolve(
     "pgeocode",
-    "https://github.com/symerio/"
-    "pgeocode/blob/{revision}/"
-    "{package}/{path}#L{lineno}",
+    "https://github.com/symerio/pgeocode/blob/{revision}/{package}/{path}#L{lineno}",
 )
