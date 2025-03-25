@@ -12,20 +12,42 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+      python-version: ["3.10", "3.11", "3.12"]
+      optional-deps: [false, true]
+      exclude:
+      - python-version: "3.11"
+        optional-deps: true
 
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: astral-sh/setup-uv@v5
       with:
-        python-version: ${{ matrix.python-version }}
+      python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install thefuzz[speedup]
-        pip install -e .
+        {%- if matrix.optional-deps == "true" %}
+        uv pip install thefuzz[speedup]
+        {%- endif %}
+        uv pip install -e .
     - name: Test with pytest
       run: |
         pip install pytest pytest-httpserver
         pytest
+
+  lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: astral-sh/setup-uv@v5
+      with:
+      python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        uv pip pre-commit
+    - name: Lint with pre-commit
+      run: |
+        pre-commit run -a
