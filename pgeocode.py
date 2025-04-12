@@ -395,7 +395,7 @@ class Nominatim:
             lon (float): longitude
 
         Returns:
-            pandas.DataFrame: a DataFrame with the relevant information 
+            pandas.DataFrame: a DataFrame with the relevant information
         """
         distances = self._data_frame.apply(
             lambda row: haversine_distance(
@@ -409,7 +409,7 @@ class Nominatim:
 
         # Return the nearest row
         nearest_row = self._data_frame.loc[nearest_index].copy()
-        nearest_row['calculated_distance'] = distances[nearest_index][0]
+        nearest_row["calculated_distance"] = distances[nearest_index][0]
 
         return nearest_row
 
