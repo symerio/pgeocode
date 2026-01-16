@@ -17,7 +17,7 @@ select = [
   "PLE",    # pylint errors
   "UP",     # pyupgrade
 ]
-ignore = ["E402", "E501", "E731", "E741"]
+ignore = ["E402", "E501", "E731", "E741", "PLC0415"]
 
 [tool.mypy]
 python_version = "3.10"

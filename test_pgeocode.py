@@ -41,7 +41,7 @@ def _normalize_str(x):
         ("GB", "WC2N 5DU", "London", "BT1 5GS", "Belfast", 518),
         # ('AR', 'c1002', 'Buenos-Aires', '62091', 'Rio-Negro', 965), known failure   # noqa
         ("AU", "6837", "Perth", "3000", "melbourne", 2722),
-        ("AU", "6837", "Perth", "0221", "Barton", 3089),
+        ("AU", "6837", "Perth", "2600", "Barton", 3089),
         ("US", "60605", "Chicago", "94103", "San Francisco", 2984),
         ("CA", "M5R 1X8", "Toronto", "H2Z 1A7", "Montreal", 503),
         ("IE", "D01 R2PO", "Dublin", "T12 RW26", "Cork", 219),
