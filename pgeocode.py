@@ -387,6 +387,32 @@ class Nominatim:
 
         return pd.DataFrame(columns=self._data.columns)
 
+    def query_geocode(self, lat: float, lon: float):
+        """Get locations information from geo points
+
+        Args:
+            lat (float): latitude
+            lon (float): longitude
+
+        Returns:
+            pandas.DataFrame: a DataFrame with the relevant information
+        """
+        distances = self._data_frame.apply(
+            lambda row: haversine_distance(
+                np.array([[lat, lon]]), np.array([[row["latitude"], row["longitude"]]])
+            ),
+            axis=1,
+        )
+
+        # Get the index of the row with the smallest distance
+        nearest_index = distances.idxmin()
+
+        # Return the nearest row
+        nearest_row = self._data_frame.loc[nearest_index].copy()
+        nearest_row["calculated_distance"] = distances[nearest_index][0]
+
+        return nearest_row
+
     def _str_contains_search(self, text: str, col: str) -> pd.DataFrame:
         match_mask = self._data[col].str.lower().str.contains(text.lower())
         match_mask.fillna(False, inplace=True)
